@@ -12,10 +12,12 @@
     "seed": "node -r @swc-node/register prisma/seed/index.ts"
   },
   "dependencies": {
+    "@metamask/detect-provider": "^2.0.0",
     "@prisma/client": "5.7.1",
     "next": "14.0.4",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@swc-node/register": "^1.6.8",
