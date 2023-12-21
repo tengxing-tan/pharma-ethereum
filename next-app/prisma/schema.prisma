@@ -1,0 +1,132 @@
+// schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Drug {
+  id                   Int     @id @default(autoincrement())
+  registrationNo       String  @unique // to get data from smart contract
+  name                 String
+  activeIngredient     String
+  dosageForm           String
+  consumerMedicineInfo String? // attachment
+  ownerId              String?
+  manufacturerId       String?
+
+  owner        Stakeholder?  @relation(fields: [ownerId], references: [id])
+  manufacturer Manufacturer? @relation(fields: [manufacturerId], references: [id])
+  drugBatches  DrugBatch[]
+  createdAt    DateTime      @default(now()) @map(name: "created_at")
+  updatedAt    DateTime      @updatedAt @map(name: "updated_at")
+}
+
+model DrugBatch {
+  id              Int     @id @default(autoincrement())
+  drugId          Int
+  batchNo         String  @unique // to get data from smart contract
+  quantity        Int?
+  manufactureDate String // MM/YY
+  expiryDate      String // MM/YY
+  wholesalerId    String?
+  importerId      String?
+
+  drug       Drug            @relation(fields: [drugId], references: [id])
+  activities ProductStatus[]
+  wholesaler Wholesaler?     @relation(fields: [wholesalerId], references: [id])
+  importer   Importer?       @relation(fields: [importerId], references: [id])
+  createdAt  DateTime        @default(now()) @map(name: "created_at")
+}
+
+model ProductStatus {
+  id          Int     @id @default(autoincrement())
+  drugBatchId Int
+  stage       Role
+  process     Process
+  description String?
+  date        String
+  company     String?
+  country     String?
+  address     String?
+
+  drugBatch DrugBatch @relation(fields: [drugBatchId], references: [id])
+}
+
+model Manufacturer {
+  id            String      @id @default(cuid())
+  stakeholderId String      @unique
+  info          Stakeholder @relation(fields: [stakeholderId], references: [id])
+  products      Drug[]
+}
+
+model Importer {
+  id            String      @id @default(cuid())
+  stakeholderId String      @unique
+  info          Stakeholder @relation(fields: [stakeholderId], references: [id])
+  products      DrugBatch[]
+}
+
+model Wholesaler {
+  id            String      @id @default(cuid())
+  stakeholderId String      @unique
+  info          Stakeholder @relation(fields: [stakeholderId], references: [id])
+  products      DrugBatch[]
+}
+
+model Stakeholder {
+  id       String       @id @default(cuid())
+  name     String
+  phoneNo  String?
+  email    String       @unique // to get data from smart contract
+  address  String?
+  postcode String?
+  state    String?
+  country  String
+  role     Role
+  status   VerifyStatus @default(PENDING)
+
+  manufacturer Manufacturer?
+  wholesaler   Wholesaler?
+  importer     Importer?
+  products     Drug[]
+  createdAt    DateTime      @default(now()) @map(name: "created_at")
+  updatedAt    DateTime      @updatedAt @map(name: "updated_at")
+}
+
+model Admin {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+}
+
+enum VerifyStatus {
+  VERIFIED
+  PENDING
+  REJECTED
+}
+
+enum Role {
+  SUPPLIER
+  MANUFACTURER
+  IMPORTER
+  WHOLESALER
+}
+
+enum Process {
+  // manufacturing & packaging
+  UNDERWENT_MIXING_ENCAPSULATION
+  LABELLING_PACKAGING
+  // importer / warehousing
+  READY_TO_SHIP
+  SHIPPED
+  STORE_IN_WAREHOUSE
+  DELIVERED
+  REJECTED
+  RETURNED
+}
