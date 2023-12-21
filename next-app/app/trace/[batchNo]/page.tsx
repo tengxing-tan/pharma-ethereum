@@ -27,7 +27,7 @@ export default async function Page({ params }: {
         ? await getStakeholderByImporterId(drugBatch.importerId)
         : null
     wholesaler = (drugBatch.wholesalerId)
-        ? await getStakeholderByImporterId(drugBatch.wholesalerId)
+        ? await getStakeholderByWholesalerId(drugBatch.wholesalerId)
         : null
     const activities = await getActivitiesByBatchId(drugBatch.id)
 

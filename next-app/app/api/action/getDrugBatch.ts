@@ -53,10 +53,10 @@ export async function getDrugBatchByBatchNo(batchNo: string) {
     });
 
     if (!data) {
-        console.log(`no drug batch found! (by batch no) at ${new Date().toLocaleString()}`);
+        console.log(`💩 no drug batch found! (by batch no) at ${new Date().toLocaleString()}`);
     }
 
-    console.log(`get drug batch by batch no ok! at ${new Date().toLocaleString()}`);
+    console.log(`😇 get drug batch by batch no ok! at ${new Date().toLocaleString()}`);
     return data;
 }
 
@@ -73,7 +73,7 @@ export async function getDrugBatchByDrugId(drugId: number) {
                 createdAt: 'desc',
             },
         });
-        console.log("Get drug batch by drug id ok!")
+        console.log("😇 Get drug batch by drug id ok!")
 
         return data;
     } catch (error) {

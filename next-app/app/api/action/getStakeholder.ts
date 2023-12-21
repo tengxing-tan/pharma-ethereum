@@ -40,7 +40,7 @@ export async function getStakeholdersByRole(role: string) {
     }) : null
 
     if (!data) {
-        console.log("Get stakeholders by role OK!")
+        console.log("😇 Get stakeholders by role OK!")
     }
 
     return data
@@ -52,10 +52,13 @@ export async function getStakeholderById(id: string) {
         where: { id: id },
     })
 
-    console.log("get stakeholder by id ok!")
+    console.log("😇 Get stakeholder by id ok!")
     return data
 }
 export async function getStakeholderByManufacturerId(id: string) {
+
+    if (!id) return null
+
     const data = await prisma.manufacturer.findUnique({
         where: { id: id },
         select: {
@@ -63,10 +66,13 @@ export async function getStakeholderByManufacturerId(id: string) {
         }
     })
 
-    console.log("get stakeholder by manufacturer id ok!")
-    return data.info
+    console.log("😇 Get stakeholder by manufacturer id ok!")
+    return data?.info
 }
 export async function getStakeholderByImporterId(id: string) {
+
+    if (!id) return null
+
     const data = await prisma.importer.findUnique({
         where: { id: id },
         select: {
@@ -74,10 +80,13 @@ export async function getStakeholderByImporterId(id: string) {
         }
     })
 
-    console.log("get stakeholder by importer id ok!")
-    return data.info
+    console.log("😇 Get stakeholder by importer id ok! ", data?.info.name)
+    return data?.info
 }
 export async function getStakeholderByWholesalerId(id: string) {
+
+    if (!id) return null
+
     const data = await prisma.wholesaler.findUnique({
         where: { id: id },
         select: {
@@ -85,7 +94,7 @@ export async function getStakeholderByWholesalerId(id: string) {
         }
     })
 
-    console.log("get stakeholder by wholesaler id ok!")
+    console.log("😇 Get stakeholder by wholesaler id ok! ", data?.info.name)
     return data?.info
 }
 

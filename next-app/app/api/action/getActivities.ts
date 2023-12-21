@@ -5,6 +5,6 @@ export async function getActivitiesByBatchId(batchId: number) {
         where: { drugBatchId: batchId },
     })
 
-    console.log("get activities by batch id ok!")
+    console.log("😇 Get activities by batch id ok!")
     return data
 }

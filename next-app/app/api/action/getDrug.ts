@@ -44,7 +44,7 @@ export async function getDrugById(id: number) {
         id: id
       },
     });
-    console.log("Get drug by id ok!")
+    console.log("😇 Get drug by id ok!")
     return data;
   } catch (error) {
     console.error('Error fetching drug:', error);
