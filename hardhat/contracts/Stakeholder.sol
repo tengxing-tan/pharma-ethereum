@@ -11,6 +11,9 @@ contract Stakeholder {
         uint verifiedAt; // timestamp
         bool isAuthentic;
     }
+    address payable public owner;
+
+    event Withdrawal(uint amount, uint when);
 
     mapping(address => Stakeholders) public stakeholders; // Mapping id to Stakeholders
 
@@ -23,6 +26,7 @@ contract Stakeholder {
             true
         );
         console.log("Deployed Stakeholder contract, with address ", msg.sender);
+        owner = payable(msg.sender);
     }
 
     // Function to add Stakeholders
@@ -30,7 +34,12 @@ contract Stakeholder {
         string memory _email,
         address _metamaskAccount,
         uint _registeredAt // js Date.toLocalString()
-    ) public returns (bool) {
+    ) public payable returns (bool) {
+        require(
+            stakeholders[_metamaskAccount].metamaskAccount != _metamaskAccount,
+            "Stakeholder already exists"
+        );
+
         stakeholders[_metamaskAccount] = Stakeholders(
             _email,
             _metamaskAccount,
@@ -38,6 +47,8 @@ contract Stakeholder {
             0, // to be verified
             false
         );
+
+        withdraw();
 
         return true;
     }
@@ -58,5 +69,11 @@ contract Stakeholder {
         stakeholders[_metamaskAccount].isAuthentic = _isAuthentic;
 
         return true;
+    }
+
+    function withdraw() public {
+        require(msg.sender == owner, "You aren't the owner");
+        emit Withdrawal(address(this).balance, block.timestamp);
+        owner.transfer(address(this).balance);
     }
 }

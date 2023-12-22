@@ -4,18 +4,8 @@ import { Role } from '@prisma/client';
 import Metamask from './_component/metamask';
 import UserInput from '@/app/_ui/user-input';
 import Link from 'next/link';
-import { ethers } from 'ethers';
-import abi from "@/_utils/Stakeholder.json"
-
-const RPC_URL = "http://127.0.0.1:8545"
-const STAKEHOLDER_CONTRACT_ADDRESS = "0x4c5859f0F772848b2D91F1D83E2Fe57935348029"
-
-const provider = new ethers.JsonRpcProvider(RPC_URL);
-const contractAddress = STAKEHOLDER_CONTRACT_ADDRESS;
 
 export default function Page() {
-    const result = storeOnEthereum("my@mail.com", "0x70997970C51812dc3A010C7d01b50e0d17dc79C8")
-    console.log("Result: ", result)
 
     return (
         <div className="max-w-none px-4">
@@ -54,7 +44,7 @@ export default function Page() {
                     />
                     <UserInput label="Phone No." isRequired={true}
                         form={{
-                            name: "phone",
+                            name: "phoneNo",
                             type: "text",
                             value: "",
                         }}
@@ -112,46 +102,22 @@ export default function Page() {
     );
 }
 
-const storeOnEthereum = async (
-    email: string,
-    metaMaskAccount: string
-) => {
-    if (typeof contractAddress === 'undefined') {
-        console.log("Contract address is undefined")
-        return false
-    }
-
-    const signer = await provider.getSigner(); // Get the account that will sign the transaction
-    const contract = new ethers.Contract(contractAddress, abi.abi, signer);
-    const timestamp = Date.now()
-
-    try {
-        const transaction = await contract.addStakeholder(
-            "teng@email.com",
-            "0x23618e81e3f5cdf7f54c3d65f7fbc0abf5b21e8f",
-            Number(Date.parse(timestamp.toString())));
-        // await transaction.wait(); // Wait for the transaction to be mined
-        console.log("🚀 Store on Ethereum! Transaction hash: ", transaction.hash);
-    } catch (error) {
-        console.log("I felt not good, Error: ", error)
-    }
-    return true
-}
 
 
-const readOnEthereum = async () => {
 
-    if (typeof contractAddress === 'undefined') return false
+// const readOnEthereum = async () => {
 
-    const contract = new ethers.Contract(contractAddress, abi.abi, provider);
-    // debugging
-    console.log("Contract: ", contract)
-    console.log("Abi: ", abi)
+//     if (typeof contractAddress === 'undefined') return false
 
-    const getData = async () => {
-        const getResult = await contract.getStakeholder('0x70997970C51812dc3A010C7d01b50e0d17dc79C8')
-        console.log("My result: ", getResult.email)
-    }
-    getData()
-    return true
-}
+//     const contract = new ethers.Contract(contractAddress, abi.abi, provider);
+//     // debugging
+//     console.log("Contract: ", contract)
+//     console.log("Abi: ", abi)
+
+//     const getData = async () => {
+//         const getResult = await contract.getStakeholder('0x70997970C51812dc3A010C7d01b50e0d17dc79C8')
+//         console.log("My result: ", getResult.email)
+//     }
+//     getData()
+//     return true
+// }
