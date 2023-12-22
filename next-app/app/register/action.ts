@@ -64,5 +64,5 @@ const schema = z.object({
     postcode: z.string(),
     state: z.string(),
     country: z.string().min(1),
-    role: z.string().min(1),
+    role: z.enum([Role.IMPORTER, Role.MANUFACTURER, Role.WHOLESALER]),
 });

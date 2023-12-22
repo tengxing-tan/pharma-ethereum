@@ -15,13 +15,14 @@ export default function Metamask() {
         };
 
         getProvider();
+        connectMetaMask()
     }, []);
 
-    const updateWallet = async (accounts: any) => {
+    const updateWallet = (accounts: any) => {
         setWallet({ accounts });
     };
 
-    const handleConnect = async () => {
+    const connectMetaMask = async () => {
         if (typeof window.ethereum !== 'undefined') {
             let accounts = await window.ethereum.request({
                 method: 'eth_requestAccounts',
@@ -38,7 +39,7 @@ export default function Metamask() {
                 <div className="focus-within:ring-primary-500 flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset lg:max-w-md">
                     <input
                         className="block flex-1 border-0 bg-transparent p-2 text-gray-700 placeholder:text-gray-400 focus:ring-0"
-                        type="text" name="publicKey" required
+                        type="text" name="metaMaskAccount" required
                         defaultValue={
                             wallet.accounts.length > 0 ? String(wallet.accounts[0]) : ''
                         } />
@@ -47,7 +48,7 @@ export default function Metamask() {
                             <button
                                 type="button"
                                 className="rounded-e-md bg-sky-500 p-3 text-sm font-semibold text-white hover:bg-sky-600 focus:bg-sky-700"
-                                onClick={handleConnect}
+                                onClick={connectMetaMask}
                             >
                                 Connect MetaMask
                             </button>
@@ -70,4 +71,12 @@ export default function Metamask() {
             </label>
         </div>
     )
-} 
+}
+
+// there is no type definition for ethereum in window object
+// so we need to declare it
+declare global {
+    interface Window {
+        ethereum: any;
+    }
+}
