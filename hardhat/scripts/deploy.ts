@@ -1,37 +1,86 @@
-import { network, ethers } from "hardhat";
+import { ethers } from "hardhat";
 
 async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const unlockTime = currentTimestampInSeconds + 60;
 
-  const lockedAmount = ethers.parseEther("0.001");
+    // Deploy Contract
+    console.log("deploying Stakeholder contract... will get admin address on constructor...")
+    const now = new Date();
+    const accounts = await ethers.getSigners();
+    // hardhat configured accounts (20)
+    // for (const account of accounts) {
+    //     console.log(account.address);
+    // }
+    const adminAddr = accounts[0].address // the msg.sender
+    const admin = await ethers.deployContract("Stakeholder", [Date.parse(now.toString())]);
+    await admin.waitForDeployment();
 
-  const lock = await ethers.deployContract("Lock", [unlockTime], {
-    value: lockedAmount,
-  });
+    // Getter: admin address
+    console.log("admin.target / contract address / deployed to: ", admin.target)
+    const result = await admin.getStakeholder(adminAddr)
+    console.log("finding my admin: ", formatted(result))
 
-  await lock.waitForDeployment();
+    // Setter: add Stakeholder
+    console.log("adding Stakeholder...")
+    const stakeholderAddr = accounts[1].address
+    const stakeholder = await admin.addStakeholder(
+        "teng@email.com",
+        stakeholderAddr,
+        Date.parse(now.toString())
+    );
 
-  console.log(
-    `Lock with ${ethers.formatEther(
-      lockedAmount
-    )}ETH and unlock timestamp ${unlockTime} deployed to ${lock.target}`
-  );
+    if (stakeholder) console.log("Stakeholder added successfully!")
+    else console.log("Stakeholder not added!")
 
-  console.log("\n\n\n\n")
-  console.log('Next, Its my showtime:\n\n')
+    // setter: verfiry Stakeholder
+    console.log("\nverifying Stakeholder...")
+    const verify = await admin.verifyStakeholder(stakeholderAddr, true)
+    if (verify) console.log("Stakeholder verified successfully!")
+    else console.log("Stakeholder not verified!")
 
-  const admin = await ethers.deployContract("Stakeholder");
-  await admin.waitForDeployment();
+    // review added stakeholder
+    const result1 = await admin.getStakeholder(stakeholderAddr)
+    console.log("Theeer Derrrr: ", formatted(result1))
 
-  console.log("admin.target / contract address / deployed to: ", admin.target)
-  const result = await admin.getStakeholder('0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266')
-  console.log("finding my admin: ", result)
+
 }
 
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.
 main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
+    console.error(error);
+    process.exitCode = 1;
 });
+
+// format getter output
+const formatted = (stakeholderObj: any) => {
+    return {
+        email: stakeholderObj.email,
+        metamaskAccount: stakeholderObj.metamaskAccount,
+        registeredAt: new Date(Number(stakeholderObj.registeredAt)).toLocaleString(),
+        verifiedAt: new Date(Number(stakeholderObj.verifiedAt) * 1000).toLocaleString(), // * 1000 because solidity returns seconds
+        isAuthentic: stakeholderObj.isAuthentic
+    }
+}
+
+/**
+ * Sample project: Lock smart contract
+ */
+
+// async function main() {
+//     const currentTimestampInSeconds = Math.round(Date.now() / 1000);
+//     const unlockTime = currentTimestampInSeconds + 60;
+
+//     const lockedAmount = ethers.parseEther("0.001");
+
+//     const lock = await ethers.deployContract("Lock", [unlockTime], {
+//         value: lockedAmount,
+//     });
+
+//     await lock.waitForDeployment();
+
+//     console.log(
+//         `Lock with ${ethers.formatEther(
+//             lockedAmount
+//         )}ETH and unlock timestamp ${unlockTime} deployed to ${lock.target}`
+//     );
+// }
