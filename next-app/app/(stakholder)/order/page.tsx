@@ -32,6 +32,9 @@ export default async function Page({ searchParams }: {
                 </Link>
             </Heading>
 
+            <p className="pt-4 text-sm text-gray-700">
+                Showing {items ? items.length : 0} items.</p>
+
             <div className="mt-8 py-2 flex h-full flex-col bg-white">
                 {/* item list */}
                 <ul role="list" className="-my-6 divide-y divide-gray-200">
