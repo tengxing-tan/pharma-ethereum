@@ -5,31 +5,35 @@ import { useEffect, useState } from "react";
 
 export default function Metamask() {
     const [hasProvider, setHasProvider] = useState<boolean | null>(null);
-    const initialState = { accounts: [] };
-    const [wallet, setWallet] = useState(initialState);
+    const [wallet, setWallet] = useState({
+        accounts: [],
+    });
 
     useEffect(() => {
-        const getProvider = async () => {
-            const provider = await detectEthereumProvider({ silent: true });
-            setHasProvider(Boolean(provider));
-        };
-
+        // check if metamask is installed
         getProvider();
-        connectMetaMask()
+        // connect metamask
+        if (typeof window.ethereum !== 'undefined') {
+            connectMetaMask()
+        }
     }, []);
+
+    const getProvider = async () => {
+        const provider = await detectEthereumProvider({ silent: true });
+        setHasProvider(Boolean(provider));
+    };
 
     const updateWallet = (accounts: any) => {
         setWallet({ accounts });
     };
 
     const connectMetaMask = async () => {
-        if (typeof window.ethereum !== 'undefined') {
-            let accounts = await window.ethereum.request({
-                method: 'eth_requestAccounts',
-            });
+        await window.ethereum.request({
+            method: 'eth_requestAccounts',
+        }).then((accounts: any) => {
             updateWallet(accounts);
-        }
-    };
+        })
+    }
 
     return (
         <div className="w-full max-w-lg">
@@ -39,32 +43,22 @@ export default function Metamask() {
                 <div className="focus-within:ring-primary-500 flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset lg:max-w-md">
                     <input
                         className="block flex-1 border-0 bg-transparent p-2 text-gray-700 placeholder:text-gray-400 focus:ring-0"
-                        type="text" name="metaMaskAccount" required
-                        defaultValue={
-                            wallet.accounts.length > 0 ? String(wallet.accounts[0]) : ''
-                        } />
+                        type="text" name="metaMaskAccount" required minLength={42} maxLength={42}
+                        defaultValue={wallet.accounts.length > 0 ? String(wallet.accounts[0]) : ''} />
                     {hasProvider ? (
                         wallet.accounts.length <= 0 ? (
-                            <button
-                                type="button"
-                                className="rounded-e-md bg-sky-500 p-3 text-sm font-semibold text-white hover:bg-sky-600 focus:bg-sky-700"
-                                onClick={connectMetaMask}
-                            >
+                            <button type="button" className="rounded-e-md bg-sky-500 p-3 text-sm font-semibold text-white hover:bg-sky-600 focus:bg-sky-700"
+                                onClick={connectMetaMask}>
                                 Connect MetaMask
                             </button>
                         ) : (
                             <span className="inline-flex items-center p-2 text-sm font-semibold text-green-500">
-                                Connected
-                            </span>
+                                Connected</span>
                         )
                     ) : (
                         <Link href="https://metamask.io/download/" target="_blank">
-                            <button
-                                type="button"
-                                className="rounded-e-md bg-sky-500 p-3 text-sm font-semibold text-white hover:bg-sky-600 focus:bg-sky-700"
-                            >
-                                Download Metamask
-                            </button>
+                            <button type="button" className="rounded-e-md bg-sky-500 p-3 text-sm font-semibold text-white hover:bg-sky-600 focus:bg-sky-700">
+                                Download Metamask</button>
                         </Link>
                     )}
                 </div>

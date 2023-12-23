@@ -41,6 +41,12 @@ async function main() {
     const result1 = await admin.getStakeholder(stakeholderAddr)
     console.log("Theeer Derrrr: ", formatted(result1))
 
+    // emtpy stakeholder
+    const result2 = await admin.getStakeholder(accounts[2].address)
+    console.log("Theeer Derrrr: the empty stakeholder:\n", formatted(result2))
+
+
+
     const currentTimestampInSeconds = Math.round(Date.now() / 1000);
 
 
