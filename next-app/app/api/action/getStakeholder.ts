@@ -98,3 +98,15 @@ export async function getStakeholderByWholesalerId(id: string) {
     return data?.info
 }
 
+// profile
+export async function getStakeholderByEmail(email: string) {
+
+    if (!email) return null
+
+    const data = await prisma.stakeholder.findUnique({
+        where: { email: email },
+    })
+
+    console.log("😇 Get stakeholder by user id ok! \n User email: ", data?.email)
+    return data
+}

@@ -143,7 +143,7 @@ export default async function Page({ params, searchParams }: {
     );
 }
 
-const ErrorMessage = ({ msg }: { msg: string | null }) => {
+const ErrorMessage = ({ msg }: { msg?: string | null }) => {
 
     const text = (msg === 'shipment-importer') ? `🤔 hmmm... Before that, please ensure you had register an importer first.`
         : (msg === 'shipment-wholesaler') ? `🤔 hmmm... Before that, please ensure you had register a wholesaler first.`
