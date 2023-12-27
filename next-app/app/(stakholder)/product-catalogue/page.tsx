@@ -25,7 +25,6 @@ export default async function Page() {
             Create</button>
         </Link>
       </Heading>
-      <SearchBar />
 
       <p className="pt-4 text-sm text-gray-700">
         Showing {items.length} items.</p>
