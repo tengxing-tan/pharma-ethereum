@@ -12,7 +12,8 @@ export const options: NextAuthOptions = {
                 return user
             },
             credentials: {
-                email: { label: "Email", type: "text ", placeholder: "" },
+                email: { label: "Email", type: "text", placeholder: "" },
+                metaMaskAccount: { label: "MetaMask Account", type: "text", placeholder: "" },
             },
         }),
     ],
@@ -26,5 +27,8 @@ export const options: NextAuthOptions = {
 
             return session
         }
+    },
+    pages: {
+        signIn: "/signin",
     }
 }
