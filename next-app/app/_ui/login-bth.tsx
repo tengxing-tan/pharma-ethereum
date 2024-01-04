@@ -15,7 +15,7 @@ export default function LoginButton() {
 
     return (
         <div className="p-2">
-            <button onClick={() => signIn("email")} className="text-rose-400 font-semibold underline underline-offset-2 py-1 px-3">
+            <button onClick={() => signIn("email", { callbackUrl: "/product-catalogue" })} className="text-rose-400 font-semibold underline underline-offset-2 py-1 px-3">
                 Supplier site</button>
         </div >
     )

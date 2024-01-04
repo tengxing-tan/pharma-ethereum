@@ -79,16 +79,16 @@ model Wholesaler {
 }
 
 model Stakeholder {
-  id       String       @id @default(cuid())
-  name     String
-  phoneNo  String?
-  email    String       @unique // to get data from smart contract
-  address  String?
-  postcode String?
-  state    String?
-  country  String
-  role     Role
-  status   VerifyStatus @default(PENDING)
+  id         String  @id @default(cuid())
+  name       String
+  phoneNo    String?
+  email      String  @unique // to get data from smart contract
+  address    String?
+  postcode   String?
+  state      String?
+  country    String
+  role       Role
+  isVerified Boolean @default(false)
 
   manufacturer Manufacturer?
   wholesaler   Wholesaler?
@@ -103,12 +103,6 @@ model Admin {
   email     String   @unique
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @updatedAt @map(name: "updated_at")
-}
-
-enum VerifyStatus {
-  VERIFIED
-  PENDING
-  REJECTED
 }
 
 enum Role {

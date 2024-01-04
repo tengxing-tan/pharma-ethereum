@@ -9,11 +9,6 @@ export async function stakeholderSeeder(prisma: PrismaClient) {
             IMPORTER = "IMPORTER",
             WHOLESALER = "WHOLESALER"
         }
-        enum VerifyStatus {
-            VERIFIED = "VERIFIED",
-            PENDING = "PENDING",
-            REJECTED = "REJECTED"
-        }
 
         await prisma.manufacturer.create({
             data: {
@@ -29,7 +24,7 @@ export async function stakeholderSeeder(prisma: PrismaClient) {
                         state: `Kuala Lumpur`,
                         country: `Malaysia`,
                         role: Role.MANUFACTURER,
-                        status: VerifyStatus.PENDING,
+                        isVerified: true,
                     }
                 }
             }
@@ -46,7 +41,7 @@ export async function stakeholderSeeder(prisma: PrismaClient) {
                         state: `Pahang`,
                         country: `Malaysia`,
                         role: Role.IMPORTER,
-                        status: VerifyStatus.VERIFIED,
+                        isVerified: true,
                     }
                 }
             }
@@ -63,7 +58,7 @@ export async function stakeholderSeeder(prisma: PrismaClient) {
                         state: `Johor`,
                         country: `Malaysia`,
                         role: Role.WHOLESALER,
-                        status: VerifyStatus.VERIFIED,
+                        isVerified: true,
                     }
                 }
             }
@@ -75,19 +70,19 @@ export async function stakeholderSeeder(prisma: PrismaClient) {
                 email: "peter@example.com",
                 country: "Malaysia",
                 role: Role.SUPPLIER,
-                status: VerifyStatus.VERIFIED,
+                isVerified: true,
             }, {
                 name: "ABANG ADIK SDN BHD",
                 email: "abangadik@example.com",
                 country: "Malaysia",
                 role: Role.SUPPLIER,
-                status: VerifyStatus.VERIFIED,
+                isVerified: true,
             }, {
                 name: "LABORATORIES TORRENT (MALAYSIA) SDN. BHD.",
                 email: "laboratoriestorrent@example.com",
                 country: "Malaysia",
                 role: Role.SUPPLIER,
-                status: VerifyStatus.VERIFIED,
+                isVerified: true,
             }]
         })
         await prisma.admin.createMany({

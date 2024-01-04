@@ -2,13 +2,25 @@ import prisma from 'lib/prisma-client'
 
 export async function getStakeholders() {
     try {
-        const data = await prisma.stakeholder.findMany();
+        const data = await prisma.stakeholder.findMany({
+            orderBy: {
+                createdAt: 'desc'
+            },
+        });
         console.log('Get stakeholders OK!');
 
         return data;
     } catch (error) {
         console.error('Error fetching stakeholder:', error);
     }
+}
+
+export async function getStakeholdersByVerified(isVerified: boolean) {
+    return await prisma.stakeholder.findMany({
+        where: {
+            isVerified: isVerified
+        },
+    })
 }
 
 export async function getManufacturers() {
@@ -47,12 +59,10 @@ export async function getStakeholdersByRole(role: string) {
 }
 // trace, product-description
 export async function getStakeholderById(id: string) {
-    console.log("stakeholder id: ", id)
     const data = await prisma.stakeholder.findUnique({
         where: { id: id },
     })
-
-    console.log("😇 Get stakeholder by id ok!")
+    console.log("😇 Get stakeholder by id OK! ", data?.id)
     return data
 }
 export async function getStakeholderByManufacturerId(id: string) {

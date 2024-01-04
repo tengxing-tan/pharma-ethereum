@@ -7,7 +7,7 @@ import { signIn } from "next-auth/react"
 export default function SignIn() {
 
     const handleSignIn = () => {
-        signIn("email", { email: "jsmith", callbackUrl: "/product-catalogue" })
+        signIn("email", { email: "peter@example.com" })
     }
 
     return (
