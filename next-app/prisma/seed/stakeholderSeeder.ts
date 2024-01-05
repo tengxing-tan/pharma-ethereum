@@ -31,6 +31,7 @@ export async function stakeholderSeeder(prisma: PrismaClient) {
         })
         await prisma.importer.create({
             data: {
+                id: "medispec",
                 info: {
                     create: {
                         name: "MEDISPEC(M) SDN.BHD",
@@ -48,6 +49,7 @@ export async function stakeholderSeeder(prisma: PrismaClient) {
         })
         await prisma.wholesaler.create({
             data: {
+                id: "jj",
                 info: {
                     create: {
                         name: "JOHNSON & JOHNSON SDN BHD",
@@ -65,29 +67,30 @@ export async function stakeholderSeeder(prisma: PrismaClient) {
         })
         await prisma.stakeholder.createMany({
             data: [{
-                id: "peter",
-                name: "PETER SDN BHD",
-                email: "peter@example.com",
+                id: "tengxing",
+                name: "TAN SDN BHD",
+                email: "tantengxing@email.com",
                 country: "Malaysia",
                 role: Role.SUPPLIER,
                 isVerified: true,
-            }, {
-                name: "ABANG ADIK SDN BHD",
-                email: "abangadik@example.com",
-                country: "Malaysia",
-                role: Role.SUPPLIER,
-                isVerified: true,
-            }, {
-                name: "LABORATORIES TORRENT (MALAYSIA) SDN. BHD.",
-                email: "laboratoriestorrent@example.com",
-                country: "Malaysia",
-                role: Role.SUPPLIER,
-                isVerified: true,
-            }]
+            },
+                // {
+                //     name: "ABANG ADIK SDN BHD",
+                //     email: "abangadik@example.com",
+                //     country: "Malaysia",
+                //     role: Role.SUPPLIER,
+                //     isVerified: true,
+                // }, {
+                //     name: "LABORATORIES TORRENT (MALAYSIA) SDN. BHD.",
+                //     email: "laboratoriestorrent@example.com",
+                //     country: "Malaysia",
+                //     role: Role.SUPPLIER,
+                //     isVerified: true,
+                // }
+            ]
         })
         await prisma.admin.createMany({
             data: [
-                { email: "tantengxing@gmail.com" },
                 { email: "admin@admin.com" },
             ]
         })
