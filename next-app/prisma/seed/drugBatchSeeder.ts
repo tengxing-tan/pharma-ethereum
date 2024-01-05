@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Role } from "@prisma/client";
 
 export async function drugBatchSeeder(prisma: PrismaClient) {
 
@@ -17,26 +17,22 @@ export async function drugBatchSeeder(prisma: PrismaClient) {
                     activities: {
                         create: [
                             {
-                                stage: Role.MANUFACTURER,
-                                process: Process.UNDERWENT_MIXING_ENCAPSULATION,
+                                processId: 1,
                                 date: '1/5/2023',
                             },
                             {
-                                stage: Role.MANUFACTURER,
-                                process: Process.LABELLING_PACKAGING,
+                                processId: 2,
                                 date: '2/1/2023',
                             },
                             {
-                                stage: Role.IMPORTER,
-                                process: Process.SHIPPED,
+                                processId: 4,
                                 date: '3/12/2023',
                                 country: 'Malaysia',
                                 address: 'Alor Star, Kedah',
                                 company: 'RANBAXY (MALAYSIA) SDN. BHD.',
                             },
                             {
-                                stage: Role.WHOLESALER,
-                                process: Process.STORE_IN_WAREHOUSE,
+                                processId: 5,
                                 date: '4/1/2023',
                             },
                         ],
@@ -47,24 +43,4 @@ export async function drugBatchSeeder(prisma: PrismaClient) {
     } catch (error) {
         console.error('Error seeding database:', error);
     }
-}
-
-enum Role {
-    SUPPLIER = "SUPPLIER",
-    MANUFACTURER = "MANUFACTURER",
-    IMPORTER = "IMPORTER",
-    WHOLESALER = "WHOLESALER",
-}
-
-enum Process {
-    // manufacturing & packaging
-    UNDERWENT_MIXING_ENCAPSULATION = "UNDERWENT_MIXING_ENCAPSULATION",
-    LABELLING_PACKAGING = "LABELLING_PACKAGING",
-    // importer / warehousing
-    READY_TO_SHIP = "READY_TO_SHIP",
-    SHIPPED = "SHIPPED",
-    STORE_IN_WAREHOUSE = "STORE_IN_WAREHOUSE",
-    DELIVERED = "DELIVERED",
-    REJECTED = "REJECTED",
-    RETURNED = "RETURNED",
 }

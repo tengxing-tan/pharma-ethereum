@@ -4,16 +4,20 @@ const prisma = new PrismaClient()
 import { stakeholderSeeder } from './stakeholderSeeder'
 import { drugSeeder } from './drugSeeder'
 import { drugBatchSeeder } from './drugBatchSeeder'
+import { processSeeder } from './processSeeder'
 
 async function main() {
     await stakeholderSeeder(prisma)
-    console.log('Stakeholder seeding complete.')
+    console.log('🌴 Stakeholders seeded.')
 
     await drugSeeder(prisma)
-    console.log('Drug seeding complete.')
+    console.log('🌴 Drugs seeded.')
+
+    await processSeeder(prisma)
+    console.log('🌴 Processes seeded.')
 
     await drugBatchSeeder(prisma)
-    console.log('DrugBatch seeding complete.')
+    console.log('🌴 DrugBatches seeded.')
 }
 main()
     .then(async () => {
