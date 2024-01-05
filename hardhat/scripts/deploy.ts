@@ -21,9 +21,9 @@ async function main() {
 
     // Setter: add Stakeholder
     console.log("adding Stakeholder...")
-    const stakeholderAddr = accounts[1].address
+    const stakeholderAddr = '0x90f79bf6eb2c4f870365e785982e1f101e93b906'
     const stakeholder = await admin.addStakeholder(
-        "teng@email.com",
+        "tantengxing@email.com",
         stakeholderAddr,
         Date.parse(now.toString())
     );

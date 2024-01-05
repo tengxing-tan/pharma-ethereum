@@ -1,3 +1,4 @@
+import { validateMetaMaskAccount } from "@/lib/smart-contracts/manage-stakeholders";
 import prisma from "lib/prisma-client";
 
 export async function getUserByEmail(email: string) {
@@ -6,4 +7,8 @@ export async function getUserByEmail(email: string) {
     })
 
     return data
+}
+
+export async function getUserByEthers(metaMaskAccount: string) {
+    return await validateMetaMaskAccount(metaMaskAccount);
 }

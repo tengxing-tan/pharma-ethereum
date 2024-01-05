@@ -3,11 +3,19 @@
 import UserInput from "@/app/_ui/user-input"
 import Metamask from "@/app/register/_component/metamask"
 import { signIn } from "next-auth/react"
+import { z } from "zod"
 
-export default function SignIn() {
+export default function SignIn({ searchParams }: {
+    searchParams: {
+        error: string
+    }
+}) {
+    async function handleSignIn(formData: FormData) {
 
-    const handleSignIn = () => {
-        signIn("email", { email: "peter@example.com" })
+        const email = z.string().email().parse(formData.get("email"))
+        const metaMaskAccount = z.string().regex(/0x[\w\d]+/g).parse(formData.get("metaMaskAccount"))
+        // console.log(`Email: ${email}, MetaMask Account: ${metaMaskAccount}`)
+        await signIn("stakeholder-login", { email: email, metaMaskAccount: metaMaskAccount, callbackUrl: "/product-catalogue" })
     }
 
     return (
@@ -16,6 +24,12 @@ export default function SignIn() {
                 <h1 className="pb-6 text-5xl font-medium text-gray-600">
                     Sign In </h1>
                 <div className="bg-white w-full max-w-lg rounded-3xl border border-200 shadow py-20 px-12 lg:px-20 space-y-4">
+                    {(searchParams.error === 'CredentialsSignin') ? (
+                        <div className="bg-rose-100 border border-rose-500 rounded">
+                            <p className="py-1 px-2 font-semibold text-rose-500">
+                                🙀 Invalid credentials.</p>
+                        </div>
+                    ) : null}
 
                     <Metamask />
                     <UserInput
