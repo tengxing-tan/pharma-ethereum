@@ -94,8 +94,8 @@ export async function updateShipmentProcess(formData: FormData) {
         country: formData.get('country'),
     });
     // validate processId
-    const processId = Number(formData.get('processId'));
-
+    const processId = Number(formData.get('process'));
+    console.log('processId: ', processId);
     await prisma.activity.create({
         data: {
             ...validedactivity,

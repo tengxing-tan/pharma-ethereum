@@ -32,7 +32,7 @@ export default async function Page({ params }: {
 
     return (
         <div className="px-6 w-full max-w-3xl">
-            <Link    href="/trace">
+            <Link href="/trace">
                 <Heading heading="Trace Pharmaceuticals" />
             </Link>
             {owner ? (
@@ -52,9 +52,11 @@ export default async function Page({ params }: {
                     {/* <p className="text-gray-700">
                     Transaction hash: <p className="inline-block p-1 font-mono font-semibold text-xs text-primary-600">
                         0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9</p></p> */}
-                    <p className="text-gray-700 font-mono text-sm">
-                        &gt; The company had verified at: <p className="inline-block p-1 font-semibold text-xs text-primary-600">
-                            {`1/5/2024, 10:28:46 PM`}</p></p>
+                    <div className="text-gray-700 font-mono text-sm">
+                        &gt; The company had verified at: &nbsp;
+                        <p className="inline-block p-1 font-semibold text-xs text-primary-600">
+                            {`1/5/2024, 10:28:46 PM`}</p>
+                    </div>
                 </div>
             </div>
 
