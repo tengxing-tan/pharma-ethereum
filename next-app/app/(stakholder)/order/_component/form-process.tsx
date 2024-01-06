@@ -1,8 +1,10 @@
-'use client'
-import { Process } from "@prisma/client";
-import { Processes } from "lib/enum";
+import { getProcesses } from "@/app/api/action/getProcess"
+import { Process } from "@prisma/client"
 
-export default function FormProcessOption() {
+export default async function FormProcessOption() {
+
+    const processes: Process[] = await getProcesses()
+
     return (
         <div className="w-full max-w-sm">
             <label className="block pb-1 text-sm font-medium text-gray-700">
@@ -12,8 +14,8 @@ export default function FormProcessOption() {
                     <select required name="process" className="block flex-1 border-0 bg-transparent p-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 capitalize">
                         <option key="0" value="">Choose one</option>
                         {
-                            Object.values(Process).map((item) => (
-                                <option key={item} value={item} className="capitalize"> {Processes[item]} </option>
+                            Object.values(processes).map((item, i) => (
+                                <option key={i} value={item.id} className="capitalize"> {item.name} </option>
                             ))
                         }
                     </select>

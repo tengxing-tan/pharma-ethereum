@@ -62,7 +62,7 @@ model Process {
   stage Role
   name  String
 
-  activities Activity[]
+  activity Activity[]
 }
 
 //   // manufacturing & packaging

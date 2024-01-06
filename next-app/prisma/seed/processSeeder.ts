@@ -22,7 +22,7 @@ export async function processSeeder(prisma: PrismaClient) {
                     name: 'Shipped',
                 },
                 {
-                    stage: Role.IMPORTER,
+                    stage: Role.WHOLESALER,
                     name: 'Store in Warehouse',
                 },
                 {

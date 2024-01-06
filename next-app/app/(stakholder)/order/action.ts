@@ -86,20 +86,21 @@ export async function updateShipmentProcess(formData: FormData) {
         }
     }
 
-    const validedProductStatus = productStatusSchema.parse({
+    const validedactivity = activitySchema.parse({
         date: formData.get('date'),
         description: formData.get('description'),
         company: formData.get('company'),
         address: formData.get('address'),
         country: formData.get('country'),
     });
+    // validate processId
+    const processId = Number(formData.get('processId'));
 
-    await prisma.productStatus.create({
+    await prisma.activity.create({
         data: {
-            ...validedProductStatus,
-            stage: formData.get('stage'), // run as expected, can be fixed later
-            process: formData.get('process'),
-            drugBatch: { connect: { id: batchId } },
+            ...validedactivity,
+            processId: processId,
+            drugBatchId: batchId,
         },
     });
 
@@ -145,7 +146,7 @@ export async function deleteDrugBatch(formData: FormData) {
     const batchId = Number(formData.get('batchId'));
 
     try {
-        await prisma.productStatus.deleteMany({
+        await prisma.activity.deleteMany({
             where: {
                 drugBatchId: batchId
             }
@@ -176,7 +177,7 @@ const basicScheme = z.object({
     expiryDate: z.string().min(1),
 });
 
-const productStatusSchema = z.object({
+const activitySchema = z.object({
     date: z.string(),
     description: z.string(),
     company: z.string(),
