@@ -5,7 +5,7 @@ import clsx from "clsx"
 
 export default async function StakeholderProfile({ stakeholderId, children }: {
     stakeholderId: string,
-    children?: React.ReactNode | null
+    children: React.ReactNode | null
 }) {
 
     const profile = await getStakeholderById(stakeholderId)

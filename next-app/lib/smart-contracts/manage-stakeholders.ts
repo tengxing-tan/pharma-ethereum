@@ -1,4 +1,4 @@
-import { stakeholderContract } from "./const-variables"
+import { stakeholderContract } from "./const-variables";
 
 export async function validateMetaMaskAccount(metaMaskAccount: string) {
 

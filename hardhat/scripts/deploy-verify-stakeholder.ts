@@ -26,7 +26,7 @@ async function verifyStakeholder() {
     const viewAcc9AfterVerified = await contract.getStakeholder(acc9)
 
     // print
-    console.log("😼 Gottiu contract target", contract.target)
+    console.log("😼 Gottiu contract target", contract.target.toString().toLowerCase())
     console.log(`
         😼 Gottiu stakeholder account #9
         Transaction hash: ${stakeholder.hash}
