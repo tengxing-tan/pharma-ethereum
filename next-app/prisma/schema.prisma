@@ -109,6 +109,7 @@ model Stakeholder {
   country     String
   role        Role
   isVerified  Boolean @default(false)
+  transactionHash String?
 
   manufacturer Manufacturer?
   wholesaler   Wholesaler?

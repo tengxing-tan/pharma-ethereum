@@ -3,7 +3,7 @@ import stakeholderAbi from "@/_utils/Stakeholder.json"
 
 // Constants
 export const RPC_URL = "http://127.0.0.1:8545"
-export const STAKEHOLDER_CONTRACT_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+export const STAKEHOLDER_CONTRACT_ADDRESS = "0xa85233c63b9ee964add6f2cffe00fd84eb32338f"
 
 // Provider
 export const provider = new ethers.JsonRpcProvider(RPC_URL);

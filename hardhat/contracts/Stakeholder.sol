@@ -61,7 +61,10 @@ contract Stakeholder {
         address _metaMaskAccount,
         bool _isAuthentic
     ) external payable {
-        stakeholders[_metaMaskAccount].verifiedAt = block.timestamp;
-        stakeholders[_metaMaskAccount].isAuthentic = _isAuthentic;
+        uint fee = msg.value;
+        if (fee >= 0) {
+            stakeholders[_metaMaskAccount].verifiedAt = block.timestamp;
+            stakeholders[_metaMaskAccount].isAuthentic = _isAuthentic;
+        }
     }
 }

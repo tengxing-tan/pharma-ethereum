@@ -1,6 +1,7 @@
 'use server'
 
 import { getStakeholderById } from "@/app/api/action/getStakeholder"
+import { getStakeholderOnEth } from "@/lib/smart-contracts/manage-stakeholders"
 import clsx from "clsx"
 
 export default async function StakeholderProfile({ stakeholderId, children }: {
@@ -12,7 +13,9 @@ export default async function StakeholderProfile({ stakeholderId, children }: {
     if (!profile) return null
 
     // Ethereum
-    const isVerified = true
+    const stakeholderOnEth: StakeholderObj = await getStakeholderOnEth(profile.metaMaskAcc)
+    const isVerified = stakeholderOnEth && stakeholderOnEth.isAuthentic
+    console.log(stakeholderOnEth)
 
     return (
         <div className="bg-white w-full p-4 rounded shadow">
@@ -23,26 +26,54 @@ export default async function StakeholderProfile({ stakeholderId, children }: {
                 {/* Company name */}
                 <p className="text-lg text-gray-800 font-semibold">
                     {profile.name}</p>
-                {/* Verified status */}
-                <p className={clsx(
-                    "inline-flex items-center rounded-md px-2 py-0.5 text-sm font-medium ring-1 ring-inset",
-                    isVerified ? "bg-green-50 text-green-700 ring-green-400" : "bg-rose-50 text-rose-700 ring-rose-400"
-                )}>
-                    {isVerified ? "Verified" : "Unverified"}
-                </p>
             </div>
             <div className="space-y-2">
-                <h3 className="text-xs text-gray-700 font-bold">Blockchain Info: </h3>
-                {/* Blockchain data */}
-                <p className="font-mono text-xs text-gray-500">
-                    &gt; MetaMask Account (Public Key):&nbsp;
-                    <code className="font-semibold">
-                        {profile.metaMaskAcc}</code>
-                </p>
-                {/* transaction hash */}
-                <p className="font-mono text-xs text-gray-500">
-                    &gt; Transaction hash:
-                </p>
+                <h3 className="text-xs text-gray-700 font-bold">Data on Blockchain: </h3>
+                <div className="font-mono text-xs text-gray-500">
+                    <div className="grid grid-cols-3">
+                        {/* Blockchain data */}
+                        <p>&gt; MetaMask Account (Public Key)</p>
+                        {/* MetaMask account */}
+                        <code className="text-gray-700 col-span-2">
+                            {stakeholderOnEth && stakeholderOnEth.metamaskAccount !== ''
+                                ? stakeholderOnEth.metamaskAccount
+                                : 'no data'}
+                        </code>
+                        {/* Verified status */}
+                        <p>&gt; Authenticity</p>
+                        <code className={clsx(
+                            "col-span-2 w-fit rounded font-bold",
+                            isVerified ? "text-green-500" : "text-rose-500"
+                        )}>
+                            {isVerified ? "Verified" : "Unverified"}
+                        </code>
+                        {/* Email */}
+                        <p>&gt; Email</p>
+                        <code className="text-primary-500 col-span-2">
+                            {stakeholderOnEth && stakeholderOnEth.email !== ''
+                                ? stakeholderOnEth.email
+                                : 'no data'}
+                        </code>
+                        {/* verfied at */}
+                        <p>&gt; Registered At</p>
+                        <code className="text-gray-700 col-span-2">
+                            {stakeholderOnEth && Number(stakeholderOnEth.registeredAt) !== 0
+                                ? new Date(Number(stakeholderOnEth.registeredAt) * 1000).toString()
+                                : 'no data'
+                            }</code>
+                        {/* verfied at */}
+                        <p>&gt; Verfied At</p>
+                        <code className="text-gray-700 col-span-2">
+                            {stakeholderOnEth && Number(stakeholderOnEth.verifiedAt) !== 0
+                                ? new Date(Number(stakeholderOnEth.verifiedAt) * 1000).toString()
+                                : 'no data'
+                            }</code>
+                        {/* transaction hash */}
+                        <p>&gt; Transaction hash</p>
+                        <code className="text-gray-700 col-span-2">
+                            {profile.transactionHash ?? 'no data'}</code>
+                    </div>
+                </div>
                 <div>
                     <h3 className="text-xs text-gray-700 font-bold">Contact: </h3>
                     <p className="text-sm text-primary-500">{profile.email}</p>
@@ -60,15 +91,18 @@ export default async function StakeholderProfile({ stakeholderId, children }: {
                         <p>Registered at: </p>
                         <p className="text-gray-700">{profile.createdAt.toLocaleString()}</p>
                     </div>
-                    {/* TODO: Ethereum */}
-                    <div className="text-sm text-gray-500 flex space-x-1">
-                        <p>Verified at: </p>
-                        <p className="text-gray-700">{isVerified ? '2024' : 'unverfied'}</p>
-                    </div>
                 </div>
             </div>
 
             {children}
         </div>
     )
+}
+
+type StakeholderObj = {
+    email: string;
+    metamaskAccount: string;
+    registeredAt: number | null;
+    verifiedAt: number | null;
+    isAuthentic: boolean;
 }

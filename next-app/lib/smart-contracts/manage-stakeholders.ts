@@ -18,3 +18,19 @@ export async function validateMetaMaskAccount(metaMaskAccount: string) {
         return false;
     }
 }
+
+export async function getStakeholderOnEth(metaMaskAccount: string) {
+    try {
+        // Convert the MetaMask account address to lowercase for consistency
+        const normalizedAddress = metaMaskAccount.toLowerCase();
+
+        // Call your contract to get the stakeholder details based on the MetaMask account
+        const stakeholder = await stakeholderContract.getStakeholder(normalizedAddress)
+        // console.log("🌭 Get from ethereum: ", stakeholder)
+
+        return stakeholder
+    } catch (error) {
+        console.error('Error validating MetaMask account:', error);
+        return null;
+    }
+}

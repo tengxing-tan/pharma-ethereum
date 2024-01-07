@@ -21,9 +21,12 @@ async function verifyStakeholder() {
     // get stakeholder
     const viewAcc9 = await contract.getStakeholder(acc9)
 
-    // verfiry stakeholder
-    await contract.verifyStakeholder(acc9, false, { value: ethers.parseEther("0") })
+    // verify stakeholder
+    await contract.verifyStakeholder(acc9, true, { value: ethers.parseEther("0") })
     const viewAcc9AfterVerified = await contract.getStakeholder(acc9)
+
+    // get empty stakeholder
+    const emptyObj = await contract.getStakeholder('0x90f79bf6eb2c4f870365e785982e1f101e93b909')
 
     // print
     console.log("😼 Gottiu contract target", contract.target.toString().toLowerCase())
@@ -36,6 +39,7 @@ async function verifyStakeholder() {
     )
     console.log("\n😼 Gottiu stakeholder account #9\n", formattedStakeholderObj(viewAcc9))
     console.log("\n😼 Gottiu stakeholder account #9\n", formattedStakeholderObj(viewAcc9AfterVerified))
+    console.log("\n😼 Gottiu empty stakeholder\n", formattedStakeholderObj(emptyObj))
 }
 
 try {
