@@ -20,7 +20,7 @@ export default async function StakeholderList({ role }: {
         <ul className="grid lg:grid-cols-2 gap-6 items-center">
             {stakeholders?.map((item) => (
                 <li key={item.id} className="bg-white p-4 rounded-md shadow-md">
-                    <Link href={`/admin/stakeholder/${item.id}`}>
+                    <Link href={`/admin/stakeholder/${item.id}?mm=${item.metaMaskAcc}`}>
                         <div className="flex justify-between">
                             <div className="inline-flex space-x-2">
                                 {/* Stakeholder Role */}
@@ -38,6 +38,7 @@ export default async function StakeholderList({ role }: {
                         </div>
                         <p className="text-base text-gray-700 font-semibold">{item.name}</p>
                         <p className="text-sm text-primary-500">{item.email}</p>
+                        <p className="mt-1 p-1 text-xs w-fit font-mono font-semibold rounded border border-gray-300 text-gray-500">🦊 {item.metaMaskAcc}</p>
                     </Link>
                 </li>
             ))}

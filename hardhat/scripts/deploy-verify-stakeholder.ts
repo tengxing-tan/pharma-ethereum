@@ -12,26 +12,30 @@ async function verifyStakeholder() {
         acc9,
         getNow(),
     )
+    const tengxing = await contract.addStakeholder(
+        'tantengxing@email.com',
+        '0x90f79bf6eb2c4f870365e785982e1f101e93b906',
+        getNow(),
+    )
 
     // get stakeholder
     const viewAcc9 = await contract.getStakeholder(acc9)
 
     // verfiry stakeholder
-    await contract.verifyStakeholder(acc9, true, { value: ethers.parseEther("0") })
-    // etherjs use this, hardhat use above
-    // const verfiedAcc9 = await contract.verifyStakeholder(acc9, true, { value: ethers.utils.parseEther("0") })
+    await contract.verifyStakeholder(acc9, false, { value: ethers.parseEther("0") })
     const viewAcc9AfterVerified = await contract.getStakeholder(acc9)
 
     // print
     console.log("😼 Gottiu contract target", contract.target)
-    console.log(`😼 Gottiu stakeholder account #9
+    console.log(`
+        😼 Gottiu stakeholder account #9
         Transaction hash: ${stakeholder.hash}
         From: ${stakeholder.from}
         To: ${stakeholder.to}
-        Gas Price: ${stakeholder.gasPrice.toString()}`
+        Gas Price: ${stakeholder.gasPrice.toString()}\n`
     )
-    console.log("😼 Gottiu stakeholder account #9\n", formattedStakeholderObj(viewAcc9))
-    console.log("😼 Gottiu stakeholder account #9\n", formattedStakeholderObj(viewAcc9AfterVerified))
+    console.log("\n😼 Gottiu stakeholder account #9\n", formattedStakeholderObj(viewAcc9))
+    console.log("\n😼 Gottiu stakeholder account #9\n", formattedStakeholderObj(viewAcc9AfterVerified))
 }
 
 try {

@@ -1,10 +1,10 @@
-import { PrismaClient, Role } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 
 export async function drugBatchSeeder(prisma: PrismaClient) {
 
     try {
         // Seed drugBatchs
-        for (let i = 1; i <= 10; i++) {
+        for (let i = 1; i <= 50; i++) {
             await prisma.drugBatch.create({
                 data: {
                     drugId: i % 22 + 1,

@@ -2,11 +2,10 @@
 
 import { getStakeholderById } from "@/app/api/action/getStakeholder"
 import clsx from "clsx"
-import { verifyStakeholder } from "../action"
 
-
-export default async function StakeholderProfile({ stakeholderId }: {
-    stakeholderId: string
+export default async function StakeholderProfile({ stakeholderId, children }: {
+    stakeholderId: string,
+    children?: React.ReactNode | null
 }) {
 
     const profile = await getStakeholderById(stakeholderId)
@@ -33,9 +32,16 @@ export default async function StakeholderProfile({ stakeholderId }: {
                 </p>
             </div>
             <div className="space-y-2">
+                <h3 className="text-xs text-gray-700 font-bold">Blockchain Info: </h3>
+                {/* Blockchain data */}
+                <p className="font-mono text-xs text-gray-500">
+                    &gt; MetaMask Account (Public Key):&nbsp;
+                    <code className="font-semibold">
+                        {profile.metaMaskAcc}</code>
+                </p>
                 {/* transaction hash */}
                 <p className="font-mono text-xs text-gray-500">
-                    Transaction hash:
+                    &gt; Transaction hash:
                 </p>
                 <div>
                     <h3 className="text-xs text-gray-700 font-bold">Contact: </h3>
@@ -62,14 +68,7 @@ export default async function StakeholderProfile({ stakeholderId }: {
                 </div>
             </div>
 
-            {/* TODO */}
-            <form action={verifyStakeholder} method="POST">
-                <input type="hidden" name="stakeholderId" value={stakeholderId} />
-                <div className="flex justify-end space-x-4">
-                    <input type="submit" name="verify" value="approve" className="capitalize shadow p-2 text-sm font-bold text-primary-500 hover:text-primary-700 hover:bg-gray-100" />
-                    <input type="submit" name="verify" value="reject" className="capitalize shadow p-2 text-sm font-bold text-rose-500 hover:text-rose-700 hover:bg-gray-100" />
-                </div>
-            </form>
+            {children}
         </div>
     )
 }

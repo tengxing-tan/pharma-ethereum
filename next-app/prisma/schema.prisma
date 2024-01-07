@@ -98,16 +98,17 @@ model Wholesaler {
 }
 
 model Stakeholder {
-  id         String  @id @default(cuid())
-  name       String
-  phoneNo    String?
-  email      String  @unique // to get data from smart contract
-  address    String?
-  postcode   String?
-  state      String?
-  country    String
-  role       Role
-  isVerified Boolean @default(false)
+  id          String  @id @default(cuid())
+  metaMaskAcc String  @unique
+  name        String
+  phoneNo     String?
+  email       String  @unique // to get data from smart contract
+  address     String?
+  postcode    String?
+  state       String?
+  country     String
+  role        Role
+  isVerified  Boolean @default(false)
 
   manufacturer Manufacturer?
   wholesaler   Wholesaler?

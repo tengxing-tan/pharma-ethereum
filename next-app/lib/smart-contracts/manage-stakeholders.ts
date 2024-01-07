@@ -1,10 +1,4 @@
-import { ethers } from 'ethers';
-import stakeholderAbi from "@/_utils/Stakeholder.json"
-import { STAKEHOLDER_CONTRACT_ADDRESS, RPC_URL } from "./constants"
-
-// Assume you have an ethers.js provider and contract instance
-const provider = new ethers.JsonRpcProvider(RPC_URL);
-const contract = new ethers.Contract(STAKEHOLDER_CONTRACT_ADDRESS, stakeholderAbi.abi, provider);
+import { stakeholderContract } from "./const-variables"
 
 export async function validateMetaMaskAccount(metaMaskAccount: string) {
 
@@ -13,7 +7,7 @@ export async function validateMetaMaskAccount(metaMaskAccount: string) {
         const normalizedAddress = metaMaskAccount.toLowerCase();
 
         // Call your contract to get the stakeholder details based on the MetaMask account
-        const stakeholder = await contract.getStakeholder(normalizedAddress)
+        const stakeholder = await stakeholderContract.getStakeholder(normalizedAddress)
         // console.log("🌭 Get from ethereum: ", stakeholder)
 
         return (stakeholder.email && stakeholder.email !== '')

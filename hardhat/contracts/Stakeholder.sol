@@ -15,8 +15,6 @@ contract Stakeholder {
 
     address payable public owner;
 
-    event Withdrawal(uint amount, uint when);
-
     constructor(uint _registeredAt) {
         stakeholders[msg.sender] = Stakeholders(
             "admin@pharm.com",
@@ -65,11 +63,5 @@ contract Stakeholder {
     ) external payable {
         stakeholders[_metaMaskAccount].verifiedAt = block.timestamp;
         stakeholders[_metaMaskAccount].isAuthentic = _isAuthentic;
-    }
-
-    function withdraw() public {
-        require(msg.sender == owner, "You aren't the owner");
-        emit Withdrawal(address(this).balance, block.timestamp);
-        owner.transfer(address(this).balance);
     }
 }

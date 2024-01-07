@@ -16,6 +16,7 @@ export async function stakeholderSeeder(prisma: PrismaClient) {
                 info: {
                     create: {
                         id: "ranbaxy",
+                        metaMaskAcc: "0x00",
                         name: "RANBAXY (MALAYSIA) SDN. BHD.",
                         phoneNo: `016-7891 0234`,
                         email: `ranbaxy@example.com`,
@@ -24,7 +25,7 @@ export async function stakeholderSeeder(prisma: PrismaClient) {
                         state: `Kuala Lumpur`,
                         country: `Malaysia`,
                         role: Role.MANUFACTURER,
-                        isVerified: true,
+                        isVerified: false,
                     }
                 }
             }
@@ -34,6 +35,7 @@ export async function stakeholderSeeder(prisma: PrismaClient) {
                 id: "medispec",
                 info: {
                     create: {
+                        metaMaskAcc: "0x01",
                         name: "MEDISPEC(M) SDN.BHD",
                         phoneNo: `016-7891 0267`,
                         email: `medispec@example.com`,
@@ -42,7 +44,7 @@ export async function stakeholderSeeder(prisma: PrismaClient) {
                         state: `Pahang`,
                         country: `Malaysia`,
                         role: Role.IMPORTER,
-                        isVerified: true,
+                        isVerified: false,
                     }
                 }
             }
@@ -52,6 +54,7 @@ export async function stakeholderSeeder(prisma: PrismaClient) {
                 id: "jj",
                 info: {
                     create: {
+                        metaMaskAcc: "0x02",
                         name: "JOHNSON & JOHNSON SDN BHD",
                         phoneNo: `016-7891 0296`,
                         email: `jj@example.com`,
@@ -60,7 +63,7 @@ export async function stakeholderSeeder(prisma: PrismaClient) {
                         state: `Johor`,
                         country: `Malaysia`,
                         role: Role.WHOLESALER,
-                        isVerified: true,
+                        isVerified: false,
                     }
                 }
             }
@@ -68,24 +71,25 @@ export async function stakeholderSeeder(prisma: PrismaClient) {
         await prisma.stakeholder.createMany({
             data: [{
                 id: "tengxing",
+                metaMaskAcc: "0x90f79bf6eb2c4f870365e785982e1f101e93b906",
                 name: "TAN SDN BHD",
                 email: "tantengxing@email.com",
                 country: "Malaysia",
                 role: Role.SUPPLIER,
-                isVerified: true,
+                isVerified: false,
             },
                 // {
                 //     name: "ABANG ADIK SDN BHD",
                 //     email: "abangadik@example.com",
                 //     country: "Malaysia",
                 //     role: Role.SUPPLIER,
-                //     isVerified: true,
+                //     isVerified: false,
                 // }, {
                 //     name: "LABORATORIES TORRENT (MALAYSIA) SDN. BHD.",
                 //     email: "laboratoriestorrent@example.com",
                 //     country: "Malaysia",
                 //     role: Role.SUPPLIER,
-                //     isVerified: true,
+                //     isVerified: false,
                 // }
             ]
         })
