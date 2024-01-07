@@ -1,15 +1,17 @@
 'use client'
 
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { updateStakeholderStatus } from "../action"
 import { ethers } from "ethers"
 import stakeholderAbi from "@/_utils/Stakeholder.json"
+import { redirect, useRouter } from "next/navigation"
 
 export default function VerifyForm({ metaMaskAcc, contractAdd }: {
     metaMaskAcc?: string,
     contractAdd: string
 }) {
 
+    const router = useRouter()
     if (typeof metaMaskAcc === 'undefined') return null
 
     useEffect(() => {
@@ -22,7 +24,8 @@ export default function VerifyForm({ metaMaskAcc, contractAdd }: {
         if (typeof metaMaskAcc === 'undefined') return null
         // init contract
         const provider = new ethers.BrowserProvider(window.ethereum)
-        const signer = await provider.getSigner()
+        // const provider = new ethers.JsonRpcProvider(process.env.HARDHAT_RPC_URL)
+        const signer = await provider.getSigner(0)
         const contract = new ethers.Contract(
             contractAdd,
             stakeholderAbi.abi,
@@ -36,11 +39,12 @@ export default function VerifyForm({ metaMaskAcc, contractAdd }: {
             { value: ethers.parseEther("0") }
         )
         const receipt = await transaction.wait()
-        console.log('Receipt: ', receipt)
+        // console.log('Receipt: ', receipt)
 
-        if (receipt.hash === 0) return
+        if (receipt.hash === 0) redirect('/admin?error=transaction-failed')
         else {
             await updateStakeholderStatus(metaMaskAcc, verify, receipt.hash)
+            router.refresh()
         }
     }
 

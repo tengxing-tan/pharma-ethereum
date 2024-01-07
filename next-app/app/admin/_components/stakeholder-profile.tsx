@@ -98,7 +98,7 @@ export default async function StakeholderProfile({ stakeholderId, children }: {
     )
 }
 
-type StakeholderObj = {
+export type StakeholderObj = {
     email: string;
     metamaskAccount: string;
     registeredAt: number | null;

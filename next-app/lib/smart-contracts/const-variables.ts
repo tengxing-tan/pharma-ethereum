@@ -11,7 +11,7 @@ export const provider = new ethers.JsonRpcProvider(RPC_URL);
 export const signer = await provider.getSigner();
 
 // Contract for getter
-export const stakeholderContract = new ethers.Contract(process.env.STAKEHOLDER_CONTRACT_ADDRESS ?? '', StakeholderJson.abi, provider);
+// export const stakeholderContract = new ethers.Contract(process.env.STAKEHOLDER_CONTRACT_ADDRESS ?? '', StakeholderJson.abi, provider);
 
 // Contract for setter
 // contract/[manage-].ts
