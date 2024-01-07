@@ -1,4 +1,3 @@
-'use client'
 import { createStakeholder, storeOnEthereum } from './action';
 import { Role } from '@prisma/client';
 import Metamask from './_component/metamask';
@@ -11,10 +10,12 @@ export default function Page(searchParams: {
     }
 }) {
 
+    // System message
     const popMessage = (msg: string) => {
         const message = (msg === 'success') ? '🥳 Successfully created your account!'
             : (msg === 'accHadTaken') ? '🧐 I found your account is on the database. Please login or try again with another email or MetaMask Account.'
                 : null
+
 
         if (!message) return null
 
@@ -50,25 +51,13 @@ export default function Page(searchParams: {
                         Register</h1>
                     <div className="bg-white rounded-3xl border border-200 shadow pt-28 pb-20 px-20 space-y-4">
 
-                        <p className="text-sm text-gray-700 bg-green-300/70 p-2 rounded">
+                        <p className="text-sm text-gray-70 bg-gray-100 p-2 rounded">
                             😎 Already had ad an account? <Link href="/product-catalogue" className="text-primary-500 underline">
                                 Go to login</Link>
                         </p>
 
-                        <Metamask />
+                        <Metamask contractAdd={process.env.STAKEHOLDER_CONTRACT_ADDRESS ?? ''} />
 
-                        <UserInput label="Email" isRequired={true}
-                            form={{
-                                name: "email",
-                                type: "email",
-                                value: "",
-                            }}
-                        />
-                        <div className="w-full flex justify-end pt-6">
-                            <button type="button" className="bg-white text-primary-500 px-6 py-3 text-sm font-semibold border-2 border-primary-500 rounded-lg">
-                                <Link href="#company">
-                                    Next</Link></button>
-                        </div>
                     </div>
                 </div>
 

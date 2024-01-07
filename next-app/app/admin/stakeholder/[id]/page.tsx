@@ -16,7 +16,11 @@ export default function Page({ params, searchParams }: {
             <div className="min-h-screen w-full flex flex-col p-12 space-y-6">
                 <section id="stakeholder-profile">
                     <StakeholderProfile stakeholderId={params.id}>
-                        <VerifyForm metaMaskAcc={searchParams.mm} />
+                        <VerifyForm
+                            metaMaskAcc={searchParams.mm}
+                            // because env var cannot get from client component
+                            contractAdd={process.env.STAKEHOLDER_CONTRACT_ADDRESS ?? ''}
+                        />
                     </StakeholderProfile>
                 </section>
 

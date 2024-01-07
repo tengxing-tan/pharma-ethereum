@@ -1,57 +1,78 @@
 'use client'
-import detectEthereumProvider from "@metamask/detect-provider";
+
+import { ethers } from "ethers";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import stakeholderAbi from "@/_utils/Stakeholder.json";
+import { getNow } from "@/lib/smart-contracts/const-variables";
 
-export default function Metamask() {
-    const [hasProvider, setHasProvider] = useState<boolean | null>(null);
-    const [wallet, setWallet] = useState({
+export default function Metamask({ contractAdd }: {
+    contractAdd: string
+}) {
+
+    const [wallet, setWallet] = useState<{ accounts: string[] }>({
         accounts: [],
     });
+    const [email, setEmail] = useState('');
 
     useEffect(() => {
-        // check if metamask is installed
-        getProvider();
         // connect metamask
         if (typeof window.ethereum !== 'undefined') {
-            connectMetaMask()
+            window.ethereum.request({ method: 'eth_requestAccounts' }).then((accounts: string[]) => {
+                setWallet({ accounts });
+            });
         }
     }, []);
 
-    const getProvider = async () => {
-        const provider = await detectEthereumProvider({ silent: true });
-        setHasProvider(Boolean(provider));
-    };
+    const handleEmail = (e: any) => {
+        setEmail(e.target.value)
+    }
 
-    const updateWallet = (accounts: any) => {
-        setWallet({ accounts });
-    };
+    async function addMetaMaskAcc() {
+        if (typeof window.ethereum === 'undefined') return null
+        const publicKey = wallet.accounts[0].toLocaleLowerCase()
+        if (publicKey.length !== 42) return null
 
-    function connectMetaMask(): void {
-        window.ethereum.request({
-            method: 'eth_requestAccounts',
-        }).then((accounts: any) => {
-            updateWallet(accounts);
-        });
+        // init contract
+        const provider = new ethers.BrowserProvider(window.ethereum)
+        const signer = await provider.getSigner()
+        const contract = new ethers.Contract(
+            contractAdd,
+            stakeholderAbi.abi,
+            signer
+        )
+        console.log("contract: ", contract.target)
+        if (contract.target === '') return null
+
+        // const i = await contract.getStakeholder(publicKey)
+        // console.log("i: ", i)
+
+        try {
+            const transaction = await contract.addStakeholder([
+                email,
+                publicKey,
+                getNow(),
+                { value: ethers.parseEther('0') }
+            ])
+
+        } catch (e) {
+            console.log("Error: ", e)
+        }
+        // const receipt = await transaction.wait()
+        // console.log('get hash: ', receipt.hash)
     }
 
     return (
-        <div className="w-full max-w-lg">
-            <label className="block pb-1 text-sm font-medium text-gray-700">
-                Metamask Account (Public key)
-                <span className="text-rose-500">*</span>
-                <div className="bg-white focus-within:ring-primary-500 mt-1 flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset lg:max-w-md">
-                    <p className="block flex-1 border-0 bg-transparent p-2 overflow-auto text-gray-900 placeholder:text-gray-400 focus:ring-0" >
-                        {
-                            // had installed MetaMask but have not connected yet
-                            (hasProvider && wallet.accounts.length <= 0) ? (
-                                <button type="button" className="w-full bg-sky-500 text-white py-1 rounded-md text-sm font-semibold hover:bg-sky-600 focus:bg-sky-700"
-                                    onClick={connectMetaMask}>
-                                    Connect MetaMask
-                                </button>
-                            )
+        <>
+            <div className="w-full max-w-lg">
+                <label className="block pb-1 text-sm font-medium text-gray-700">
+                    Metamask Account (Public key)
+                    <span className="text-rose-500">*</span>
+                    <div className="bg-white focus-within:ring-primary-500 mt-1 flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset lg:max-w-md">
+                        <p className="block flex-1 border-0 bg-transparent p-2 overflow-auto text-gray-900 placeholder:text-gray-400 focus:ring-0" >
+                            {
                                 // is connected
-                                : (hasProvider && wallet.accounts.length > 0) ? (
+                                (wallet.accounts.length > 0) ? (
                                     <span className="text-sm font-semibold text-green-500">
                                         Connected: <span className="text-gray-500 text-xs font-mono">{wallet.accounts[0]}</span></span>
                                 )
@@ -62,12 +83,31 @@ export default function Metamask() {
                                                 Download Metamask</button>
                                         </Link>
                                     )}
-                    </p>
-                </div>
-            </label>
-            <input type="hidden" name="metaMaskAccount" required minLength={42} maxLength={42}
-                defaultValue={wallet.accounts.length > 0 ? String(wallet.accounts[0]) : ''} />
-        </div>
+                        </p>
+                    </div>
+                </label>
+                <input type="hidden" name="metaMaskAccount" required minLength={42} maxLength={42}
+                    defaultValue={wallet.accounts.length > 0 ? String(wallet.accounts[0]) : ''} />
+            </div>
+            <div className="w-full max-w-sm">
+                <label className="block text-sm font-medium text-gray-700">
+                    Email
+                    {true ? (<span className="text-rose-500">*</span>) : null}
+                    <div className="bg-white focus-within:ring-primary-500 mt-1 flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset lg:max-w-md">
+                        <input className="block flex-1 border-0 bg-transparent p-2 text-gray-900  placeholder:text-gray-400 focus:ring-0"
+                            name="email" type="email" value={email} onChange={handleEmail} required={true} />
+                    </div>
+                </label>
+            </div>
+            <div className="w-full flex justify-end pt-6">
+                <button onClick={async () => {
+                    if (wallet.accounts[0] && email.length > 5) {
+                        await addMetaMaskAcc()
+                    }
+                }} type="button" className="bg-white text-primary-500 px-6 py-3 text-sm font-semibold border-2 border-primary-500 rounded-lg">
+                    Next</button>
+            </div>
+        </>
     )
 }
 

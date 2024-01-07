@@ -1,8 +1,9 @@
 'use client'
 
 import UserInput from "@/app/_ui/user-input"
-import Metamask from "@/app/register/_component/metamask"
 import { signIn } from "next-auth/react"
+import Link from "next/link"
+import { useEffect, useState } from "react"
 import { z } from "zod"
 
 export default function SignIn({ searchParams }: {
@@ -10,6 +11,19 @@ export default function SignIn({ searchParams }: {
         error: string
     }
 }) {
+    const [wallet, setWallet] = useState<{ accounts: string[] }>({
+        accounts: [],
+    });
+
+    useEffect(() => {
+        // connect metamask
+        if (typeof window.ethereum !== 'undefined') {
+            window.ethereum.request({ method: 'eth_requestAccounts' }).then((accounts: string[]) => {
+                setWallet({ accounts });
+            });
+        }
+    }, []);
+
     async function handleSignIn(formData: FormData) {
 
         const email = z.string().email().parse(formData.get("email"))
@@ -30,8 +44,32 @@ export default function SignIn({ searchParams }: {
                                 🙀 Invalid credentials.</p>
                         </div>
                     ) : null}
-
-                    <Metamask />
+                    {/* metamask account */}
+                    <div className="w-full max-w-lg">
+                        <label className="block pb-1 text-sm font-medium text-gray-700">
+                            Metamask Account (Public key)
+                            <span className="text-rose-500">*</span>
+                            <div className="bg-white focus-within:ring-primary-500 mt-1 flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset lg:max-w-md">
+                                <p className="block flex-1 border-0 bg-transparent p-2 overflow-auto text-gray-900 placeholder:text-gray-400 focus:ring-0" >
+                                    {
+                                        // is connected
+                                        (wallet.accounts.length > 0) ? (
+                                            <span className="text-sm font-semibold text-green-500">
+                                                Connected: <span className="text-gray-500 text-xs font-mono">{wallet.accounts[0]}</span></span>
+                                        )
+                                            // client does not install MetaMask
+                                            : (
+                                                <Link href="https://metamask.io/download/" target="_blank">
+                                                    <button type="button" className="w-full bg-sky-500 text-white py-1 text-sm font-semibold hover:bg-sky-600 focus:bg-sky-700">
+                                                        Download Metamask</button>
+                                                </Link>
+                                            )}
+                                </p>
+                            </div>
+                        </label>
+                        <input type="hidden" name="metaMaskAccount" required minLength={42} maxLength={42}
+                            defaultValue={wallet.accounts.length > 0 ? String(wallet.accounts[0]) : ''} />
+                    </div>
                     <UserInput
                         label="Email"
                         form={{

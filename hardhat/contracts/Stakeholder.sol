@@ -32,21 +32,22 @@ contract Stakeholder {
         string memory _email,
         address _metaMaskAccount,
         uint _registeredAt // js Date.toLocalString()
-    ) public payable returns (bool) {
+    ) public payable {
         require(
             stakeholders[_metaMaskAccount].metamaskAccount != _metaMaskAccount,
             "Stakeholder already exists"
         );
 
-        stakeholders[_metaMaskAccount] = Stakeholders(
-            _email,
-            _metaMaskAccount,
-            _registeredAt,
-            0, // to be verified
-            false
-        );
-
-        return true;
+        uint fee = msg.value;
+        if (fee >= 0) {
+            stakeholders[_metaMaskAccount] = Stakeholders(
+                _email,
+                _metaMaskAccount,
+                _registeredAt,
+                0, // to be verified
+                false
+            );
+        }
     }
 
     // Function to get Stakeholders

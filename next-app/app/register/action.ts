@@ -6,8 +6,9 @@ import { z } from 'zod';
 import prisma from '@/lib/prisma-client';
 // for smart contract
 
-import { getNow, getSignedShContract, stakeholderContract } from '@/lib/smart-contracts/const-variables';
+import { getNow, stakeholderContract } from '@/lib/smart-contracts/const-variables';
 import { getStakeholderByEmail } from '../api/action/getStakeholder';
+import { ethers } from 'ethers';
 
 // Get stakeholer from Ethereum
 const isRegistered = async (metaMaskAccount: string, email: string) => {

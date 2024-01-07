@@ -15,7 +15,6 @@ export default async function StakeholderProfile({ stakeholderId, children }: {
     // Ethereum
     const stakeholderOnEth: StakeholderObj = await getStakeholderOnEth(profile.metaMaskAcc)
     const isVerified = stakeholderOnEth && stakeholderOnEth.isAuthentic
-    console.log(stakeholderOnEth)
 
     return (
         <div className="bg-white w-full p-4 rounded shadow">

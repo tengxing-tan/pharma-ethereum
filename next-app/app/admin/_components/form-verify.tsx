@@ -2,16 +2,15 @@
 
 import { useEffect, useState } from "react"
 import { updateStakeholderStatus } from "../action"
-import stakeholderAbi from "@/_utils/Stakeholder.json"
 import { ethers } from "ethers"
-const STAKEHOLDER_CONTRACT_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+import stakeholderAbi from "@/_utils/Stakeholder.json"
 
-export default function VerifyForm({ metaMaskAcc }: {
-    metaMaskAcc?: string
+export default function VerifyForm({ metaMaskAcc, contractAdd }: {
+    metaMaskAcc?: string,
+    contractAdd: string
 }) {
 
     if (typeof metaMaskAcc === 'undefined') return null
-    const [transaction, setTransaction] = useState<boolean | null>(null)
 
     useEffect(() => {
         if (typeof window.ethereum === 'undefined') {
@@ -25,18 +24,21 @@ export default function VerifyForm({ metaMaskAcc }: {
         const provider = new ethers.BrowserProvider(window.ethereum)
         const signer = await provider.getSigner()
         const contract = new ethers.Contract(
-            STAKEHOLDER_CONTRACT_ADDRESS,
+            contractAdd,
             stakeholderAbi.abi,
             signer
         )
+
         // handle contract
         const transaction = await contract.verifyStakeholder(
             metaMaskAcc,
             verify,
-            { value: ethers.parseEther("0") })
+            { value: ethers.parseEther("0") }
+        )
         const receipt = await transaction.wait()
+        console.log('Receipt: ', receipt)
 
-        if (receipt.hash === 0) setTransaction(false)
+        if (receipt.hash === 0) return
         else {
             await updateStakeholderStatus(metaMaskAcc, verify, receipt.hash)
         }
