@@ -5,10 +5,13 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import prisma from '@/lib/prisma-client';
 // for smart contract
-
-import { getNow, stakeholderContract } from '@/lib/smart-contracts/const-variables';
+import { getNow } from '@/lib/smart-contracts/const-variables';
 import { getStakeholderByEmail } from '../api/action/getStakeholder';
 import { ethers } from 'ethers';
+import StakeholderJson from "../../../hardhat/artifacts/contracts/Stakeholder.sol/Stakeholder.json"
+
+const provder = new ethers.JsonRpcProvider(process.env.HARDHAT_RPC_URL)
+const contract = new ethers.Contract(process.env.STAKEHOLDER_CONTRACT_ADDRESS ?? '', StakeholderJson.abi, provder)
 
 // Get stakeholer from Ethereum
 const isRegistered = async (metaMaskAccount: string, email: string) => {
@@ -23,7 +26,8 @@ const isRegistered = async (metaMaskAccount: string, email: string) => {
     // Check if stakeholder is stored on Ethereum
     try {
         // Get stakeholder from ethereum
-        const onEthereum = await stakeholderContract.getStakeholder(metaMaskAccount)
+
+        const onEthereum = await contract.getStakeholder(metaMaskAccount)
 
         // Email existed on Ethereum
         if (onEthereum.email) {
@@ -37,32 +41,6 @@ const isRegistered = async (metaMaskAccount: string, email: string) => {
 
     // account haven't taken
     return false
-}
-
-// Store stakeholder on Ethereum
-export const storeOnEthereum = async (
-    email: string,
-    metaMaskAccount: string
-) => {
-
-    const currentTimestamp = getNow()
-    try {
-        const contract = await getSignedShContract()
-        const transaction = await contract.addStakeholder(
-            email,
-            metaMaskAccount,
-            currentTimestamp,
-        )
-
-        const transactionHash = transaction.hash
-        console.log("🚀 Store on Ethereum! Transaction hash: ", transaction.hash);
-
-        return transactionHash
-    } catch (error) {
-        console.log(error)
-        console.log("💩 Ouhhhh! Cannot store data on Ethereum....\n  Check your MetaMaskAccount...")
-        return null
-    }
 }
 
 export async function createStakeholder(formData: FormData) {
@@ -82,11 +60,17 @@ export async function createStakeholder(formData: FormData) {
     }
 
     // store stakeholder on Ethereum
-    const transactionHash = await storeOnEthereum(validEmail, validMetaMaskAccount)
-    if (!transactionHash) {
-        console.error("💩 Ouhhhh! Ethereum transaction failed")
-        redirect(`?msg=error`)
-    }
+    const signer = await provder.getSigner(0);
+    try {
+        const tx = await contract.createStakeholder(
+            validMetaMaskAccount,
+            validEmail,
+            getNow(),
+            { from: signer.address }
+        );
+
+        const receipt = tx.wait();
+    } catch (error) { }
 
     // store stakeholder on database RDBMS
     try {

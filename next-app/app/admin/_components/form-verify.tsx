@@ -21,7 +21,8 @@ export default function VerifyForm({ metaMaskAcc, contractAdd }: {
     }, [])
 
     async function handleClick(verify: boolean) {
-        if (typeof metaMaskAcc === 'undefined') return null
+        console.log("handleClick")
+        if (typeof metaMaskAcc === 'undefined') redirect('/admin?error=metamask-not-installed')
         // init contract
         const provider = new ethers.BrowserProvider(window.ethereum)
         // const provider = new ethers.JsonRpcProvider(process.env.HARDHAT_RPC_URL)
@@ -36,12 +37,11 @@ export default function VerifyForm({ metaMaskAcc, contractAdd }: {
         const transaction = await contract.verifyStakeholder(
             metaMaskAcc,
             verify,
-            { value: ethers.parseEther("0") }
         )
         const receipt = await transaction.wait()
         // console.log('Receipt: ', receipt)
 
-        if (receipt.hash === 0) redirect('/admin?error=transaction-failed')
+        if (!receipt || receipt.hash === 0) redirect('/admin?error=transaction-failed')
         else {
             await updateStakeholderStatus(metaMaskAcc, verify, receipt.hash)
             router.refresh()

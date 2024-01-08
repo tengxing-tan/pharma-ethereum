@@ -15,14 +15,14 @@ export const modules: { name: string; items: Item[] }[] = [
           'Create product catalogue to promote pharmaceutical products.',
       },
       {
-        name: 'Register Stakeholder',
-        slug: 'register',
-        description: 'Review and update order status.',
-      },
-      {
         name: 'Order ',
         slug: 'order',
         description: 'Manage order.',
+      },
+      {
+        name: 'Register Stakeholder',
+        slug: 'register',
+        description: 'Review and update order status.',
       },
     ],
   },

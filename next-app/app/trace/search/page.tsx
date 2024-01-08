@@ -1,5 +1,5 @@
+import { Drug, Stakeholder } from "@prisma/client";
 import { Heading } from "app/_ui/heading";
-import ProductDescription from "app/_ui/product-description";
 import { getDrugBySearchKey } from "app/api/action/getDrug";
 import Link from "next/link";
 
@@ -19,14 +19,13 @@ export default async function Page({ searchParams }: { searchParams: { type: str
                     There are {result !== null && result ? `${result.length} products found.` : 'Query error.'}
                 </p>
             </div>
-            <ul role="list" className="-my-6 divide-y divide-gray-200">
+            <ul role="list" className="grid lg:grid-cols-2 gap-6 items-center">
                 {result && result.map((item) => (
-                    <li key={item.id} className="pt-6">
+                    <li key={item.id} className="bg-white p-4 rounded-md shadow-md border border-gray-200 hover:bg-gray-100 hover:border-gray-300">
                         <Link href={`search/${item.id}`}>
-                            <ProductDescription props={{
+                            <ProductItem props={{
                                 drug: item,
-                                owner: item.owner,
-                                manufacturer: item.manufacturer?.info,
+                                manufacturer: item.manufacturer ? item.manufacturer.info : null,
                             }} />
                         </Link>
                     </li>
@@ -34,4 +33,22 @@ export default async function Page({ searchParams }: { searchParams: { type: str
             </ul>
         </div>
     );
+}
+
+export function ProductItem({ props }: {
+    props: {
+        drug: Drug,
+        manufacturer: Stakeholder | null,
+    }
+}) {
+    return (
+        <div className="text-gray-800">
+            <p className="text-lg font-bold capitalize">{props.drug.name.toLowerCase()}</p>
+            <p className="text-sm capitalize">Manufactured By: {props.manufacturer?.name.toLowerCase()}</p>
+            <p className="text-sm capitalize">
+                <span className="text-primary-500">
+                    {props.drug.activeIngredient.toLowerCase()}</span> ({props.drug.dosageForm.toLowerCase()})
+            </p>
+        </div>
+    )
 }

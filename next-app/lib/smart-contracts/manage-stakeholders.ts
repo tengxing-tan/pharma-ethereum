@@ -1,3 +1,5 @@
+'use server'
+
 import { ethers } from "ethers";
 import StakeholderJson from "../../../hardhat/artifacts/contracts/Stakeholder.sol/Stakeholder.json"
 
@@ -5,6 +7,7 @@ const provider = new ethers.JsonRpcProvider(process.env.HARDHAT_RPC_URL)
 const contract = new ethers.Contract(process.env.STAKEHOLDER_CONTRACT_ADDRESS ?? '', StakeholderJson.abi, provider);
 
 export async function validateMetaMaskAccount(metaMaskAccount: string) {
+    if (!contract || contract === undefined) return null
 
     try {
         // Convert the MetaMask account address to lowercase for consistency
@@ -25,6 +28,8 @@ export async function validateMetaMaskAccount(metaMaskAccount: string) {
 }
 
 export async function getStakeholderOnEth(metaMaskAccount: string) {
+    if (!contract || contract === undefined) return null
+
     try {
         // Convert the MetaMask account address to lowercase for consistency
         const normalizedAddress = metaMaskAccount.toLowerCase();

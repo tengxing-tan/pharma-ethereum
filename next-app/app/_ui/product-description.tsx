@@ -1,61 +1,90 @@
 import { Drug, Stakeholder } from "@prisma/client";
+import { StakeholderObj } from "@/app/admin/_components/stakeholder-profile";
+import { getStakeholderOnEth } from "@/lib/smart-contracts/manage-stakeholders";
 
-export default function ProductDescription({ props }: {
+export default async function ProductDescription({ props }: {
     props: {
-        drug: Drug | null | undefined,
-        owner: Stakeholder | null | undefined,
-        manufacturer: Stakeholder | null | undefined,
+        drug: Drug | null,
+        owner: Stakeholder | null,
+        manufacturer: Stakeholder | null,
     }
 }) {
+    // Validate props
+    if (!props.drug || !props.owner || !props.manufacturer) return <SomethingWrong />
+    const drug = props.drug
+    const owner = props.owner
+    const manufacturer = props.manufacturer
+
+    // Ethereum
+    // const stakeholderOnEth: StakeholderObj = await getStakeholderOnEth(owner.metaMaskAcc)
+    // const isVerified = stakeholderOnEth && stakeholderOnEth.isAuthentic
+
+    // Handle error logic
+    function SomethingWrong() {
+        return (
+            <div>
+                Something wrong
+            </div>
+        )
+    }
+
     return (
-        <div>
-            <div className="mb-4 flex h-auto w-full">
-                <div className="items-left flex flex-col">
-                    <p className="text-md font-semibold text-gray-800 capitalize pb-2">{props.drug.name.toLowerCase()}</p>
-                    <p className="pb-1 text-sm text-gray-700">
-                        <span className="font-mono bg-gray-100 px-2 py-px font-medium">{props.drug.registrationNo}</span>
-                        {true ? (
-                            <span className="ml-2 inline-flex items-center rounded-md bg-green-50 px-2 py-0.5 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-700/10">
-                                Verified
-                            </span>
-                        ) : (
-                            <span className="ml-2 inline-flex items-center rounded-md bg-rose-50 px-2 py-0.5 text-sm font-medium text-rose-700 ring-1 ring-inset ring-rose-700/10">
-                                Pending for approved
-                            </span>
-                        )}
-                    </p>
-                    <div className="mt-1 text-sm text-gray-700">
-                        <p className="mt-1 text-xs text-gray-700">
-                            <span className="text-gray-500">Active ingredient: </span>
-                            <span className="text-base capitalize"> {props.drug.activeIngredient.toLowerCase()}</span>
-                        </p>
-                        <p className="mt-1 text-xs text-gray-700">
-                            <span className="text-gray-500">Dosage form: </span>
-                            <span className="text-sm"> {props.drug.dosageForm}</span>
-                        </p>
-                    </div>
-                    <div className="mt-1 text-sm text-gray-700">
-                        <p className="mt-1 text-xs text-gray-700">
-                            <span className="text-gray-500">Holder: </span>
-                            <span className="text-sm capitalize"> {props.owner ? `${props.owner.name.toLowerCase()} (${props.owner.country})` : "-"}</span>
-                        </p>
-                        <p className="mt-1 text-xs text-gray-700">
-                            <span className="text-gray-500">Holder Address: </span>
-                            <span className="text-sm capitalize"> {props.owner?.address ? `${props.owner.address}, ${props.owner.postcode}, ${props.owner.state}` : "Not provided"}</span>
-                        </p>
-                        <p className="mt-1 text-xs text-gray-700">
-                            <span className="text-gray-500">Registered on: </span>
-                            <span className="text-sm capitalize"> {props.drug ? props.drug.createdAt.toUTCString().slice(4, 16) : "-"}</span>
-                        </p>
-                    </div>
-                    <div className="mt-1 text-sm text-gray-700">
-                        <p className="mt-1 text-xs text-gray-700">
-                            <span className="text-gray-500">Manufacturer: </span>
-                            <span className="text-sm capitalize"> {props.manufacturer ? `${props.manufacturer.name.toLowerCase()} (${props.manufacturer.country})` : "-"}</span>
-                        </p>
-                    </div>
+        <div className="bg-white w-full p-4 rounded shadow border border-gray-200">
+            <div className="text-gray-700 text-sm">
+                {/* Product details */}
+                <p className="text-lg font-semibold capitalize">
+                    {drug.name.toLowerCase()}</p>
+                {/* Register no */}
+                <p className="text-xs font-mono font-semibold capitalize text-primary-500">
+                    {drug.registrationNo.toUpperCase()}</p>
+                {/* Ingredient & dosage form */}
+                <p className="capitalize">
+                    {drug.activeIngredient.toLowerCase()} ({drug.dosageForm.toLowerCase()})
+                </p>
+                <p>
+                    Register on: {drug.createdAt.toLocaleString().toLocaleLowerCase()}
+                </p>
+                <div className="pt-2">
+                    <h3 className="text-xs text-green-700 font-bold pb-1">Holder: </h3>
+                    <CompanyInfo company={owner} />
+                </div>
+                {/* manufacturer */}
+                <div className="pt-2">
+                    <h3 className="text-xs text-purple-700 font-bold pb-1">Manufacturer: </h3>
+                    <CompanyInfo company={manufacturer} />
                 </div>
             </div>
         </div>
+    )
+}
+
+function CompanyInfo({ company }: {
+    company: Stakeholder
+}) {
+    return (
+        <>
+            {/* MetaMask Account */}
+            <p className="mb-1 p-1 text-xs w-fit font-mono font-semibold rounded border border-gray-300 text-gray-500">🦊 {company.metaMaskAcc}</p>
+
+            <div className="text-sm text-gray-600 grid grid-cols-2">
+                <p>Company Name: </p>
+                <p className="capitalize">{company.name.toLowerCase()}</p>
+            </div>
+            <div className="text-sm text-gray-600 grid grid-cols-2">
+                <p>Email: </p>
+                <p className="text-primary-500">{company.email}</p>
+            </div>
+            <div className="text-sm text-gray-600 grid grid-cols-2">
+                <p>Phone: </p>
+                <p className="">{company.phoneNo ?? '-'}</p>
+            </div>
+            <div className="text-sm text-gray-600 grid grid-cols-2">
+                <p>Country: </p>
+                <p className="">{company.country ?? '-'}</p>
+            </div>
+            <div className="text-sm text-gray-600 grid grid-cols-2">
+                <p>Address: </p>
+                <p className="">{[company.address, company.postcode, company.state].join(", ")}</p>
+            </div></>
     )
 }

@@ -4,7 +4,6 @@ import { ethers } from "ethers";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import stakeholderAbi from "@/_utils/Stakeholder.json";
-import { getNow } from "@/lib/smart-contracts/const-variables";
 
 export default function Metamask({ contractAdd }: {
     contractAdd: string
@@ -28,14 +27,18 @@ export default function Metamask({ contractAdd }: {
         setEmail(e.target.value)
     }
 
-    async function addMetaMaskAcc() {
+    async function handleContract() {
         if (typeof window.ethereum === 'undefined') return null
+
         const publicKey = wallet.accounts[0].toLocaleLowerCase()
         if (publicKey.length !== 42) return null
 
+        let handleError = false
+
         // init contract
         const provider = new ethers.BrowserProvider(window.ethereum)
-        const signer = await provider.getSigner()
+        // const provider = new ethers.JsonRpcProvider('http://localhost:8545')
+        const signer = await provider.getSigner(0)
         const contract = new ethers.Contract(
             contractAdd,
             stakeholderAbi.abi,
@@ -44,22 +47,22 @@ export default function Metamask({ contractAdd }: {
         console.log("contract: ", contract.target)
         if (contract.target === '') return null
 
-        // const i = await contract.getStakeholder(publicKey)
-        // console.log("i: ", i)
-
+        // call contract: addStakeholder
         try {
-            const transaction = await contract.addStakeholder([
+            const transaction = await contract.addStakeholder(
                 email,
                 publicKey,
                 getNow(),
-                { value: ethers.parseEther('0') }
-            ])
+            )
 
-        } catch (e) {
-            console.log("Error: ", e)
+            // get receipt (transaction hash)
+            const receipt = await transaction.wait()
+            console.log('get hash: ', receipt.hash)
+        } catch (error) {
+            console.log("Error: ", error)
+            handleError = true
         }
-        // const receipt = await transaction.wait()
-        // console.log('get hash: ', receipt.hash)
+        // if success, redirect to company page
     }
 
     return (
@@ -100,11 +103,7 @@ export default function Metamask({ contractAdd }: {
                 </label>
             </div>
             <div className="w-full flex justify-end pt-6">
-                <button onClick={async () => {
-                    if (wallet.accounts[0] && email.length > 5) {
-                        await addMetaMaskAcc()
-                    }
-                }} type="button" className="bg-white text-primary-500 px-6 py-3 text-sm font-semibold border-2 border-primary-500 rounded-lg">
+                <button onClick={async () => handleContract()} type="button" className="bg-white text-primary-500 px-6 py-3 text-sm font-semibold border-2 border-primary-500 rounded-lg">
                     Next</button>
             </div>
         </>
@@ -117,4 +116,14 @@ declare global {
     interface Window {
         ethereum: any;
     }
+}
+
+// currentTimestampInSeconds
+function getNow(): number {
+    // now in ms (1704547985000)
+    const currentTimestampInMs = Date.now();
+    // Ethereum use seconds
+    const currentTimestampInSeconds = Math.round(currentTimestampInMs / 1000);
+
+    return currentTimestampInSeconds
 }
