@@ -1,4 +1,4 @@
-import { createStakeholder, storeOnEthereum } from './action';
+import { createStakeholder } from './action';
 import { Role } from '@prisma/client';
 import Metamask from './_component/metamask';
 import UserInput from '@/app/_ui/user-input';
@@ -131,21 +131,3 @@ export default function Page(searchParams: {
         </div >
     );
 }
-
-
-// const readOnEthereum = async () => {
-
-//     if (typeof contractAddress === 'undefined') return false
-
-//     const contract = new ethers.Contract(contractAddress, abi.abi, provider);
-//     // debugging
-//     console.log("Contract: ", contract)
-//     console.log("Abi: ", abi)
-
-//     const getData = async () => {
-//         const getResult = await contract.getStakeholder('0x70997970C51812dc3A010C7d01b50e0d17dc79C8')
-//         console.log("My result: ", getResult.email)
-//     }
-//     getData()
-//     return true
-// }

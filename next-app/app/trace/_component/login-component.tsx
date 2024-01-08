@@ -5,7 +5,7 @@ import { Session } from "next-auth"
 import { SessionProvider } from "next-auth/react"
 
 export default function LoginComponent({ session }: {
-    session: Session
+    session: Session | null
 }) {
     return (
         <SessionProvider session={session}>

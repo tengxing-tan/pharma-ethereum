@@ -2,7 +2,6 @@
 
 import { getStakeholderByEmail } from '@/app/api/action/getStakeholder';
 import prisma from 'lib/prisma-client'
-import { useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
@@ -29,12 +28,11 @@ export async function createNewProduct(formData: FormData) {
         consumerMedicineInfo: formData.get('consumerMedicineInfo'),
     });
 
-    // get owner id by retrieving email from session
-    const { data: session } = useSession();
-    if (!session) redirect(`/signin`)
+    const email = formData.get('email')?.toString()
+    if (!email) redirect('/product-catalogue?success=false')
 
     // then querying owner from database
-    const owner = await getStakeholderByEmail(session.user?.email ?? '')
+    const owner = await getStakeholderByEmail(email)
     const ownerId = owner?.id ?? ''
 
     // get manufacturer id from form data

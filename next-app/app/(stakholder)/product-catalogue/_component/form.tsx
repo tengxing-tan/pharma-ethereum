@@ -1,6 +1,7 @@
 import UserInput from '@/app/_ui/user-input';
 import { createNewProduct } from '../action';
 import { Stakeholder } from '@prisma/client';
+import { useSession } from 'next-auth/react';
 
 export default function Form({
     manufacturers
@@ -8,8 +9,12 @@ export default function Form({
     manufacturers: ManufacturerWithInfo[]
 }) {
 
+    const { data: session } = useSession()
+    const email = session?.user?.email
+
     return (
         <form action={createNewProduct}>
+            <input type="hidden" name="email" value={email ?? ''} />
             <div className="space-y-12 border-b border-gray-900/10 pb-12">
                 {/* form section */}
                 <div className="mt-8 grid w-full grid-cols-1 gap-6">

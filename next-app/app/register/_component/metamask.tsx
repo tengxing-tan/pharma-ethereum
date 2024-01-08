@@ -4,6 +4,7 @@ import { ethers } from "ethers";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import stakeholderAbi from "@/_utils/Stakeholder.json";
+import { redirect } from "next/navigation";
 
 export default function Metamask({ contractAdd }: {
     contractAdd: string
@@ -63,6 +64,10 @@ export default function Metamask({ contractAdd }: {
             handleError = true
         }
         // if success, redirect to company page
+        if (!handleError) {
+            // redirect to company page
+            redirect('/register?msg=success')
+        }
     }
 
     return (
