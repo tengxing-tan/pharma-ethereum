@@ -1,3 +1,5 @@
+'use client'
+
 import UserInput from '@/app/_ui/user-input';
 import { createNewProduct } from '../action';
 import { Stakeholder } from '@prisma/client';

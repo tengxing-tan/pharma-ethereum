@@ -8,7 +8,7 @@ import prisma from '@/lib/prisma-client';
 import { getNow } from '@/lib/smart-contracts/const-variables';
 import { getStakeholderByEmail } from '../api/action/getStakeholder';
 import { ethers } from 'ethers';
-import StakeholderJson from "../../../hardhat/artifacts/contracts/Stakeholder.sol/Stakeholder.json"
+import StakeholderJson from "@/_utils/Stakeholder.json"
 
 const provder = new ethers.JsonRpcProvider(process.env.HARDHAT_RPC_URL)
 const contract = new ethers.Contract(process.env.STAKEHOLDER_CONTRACT_ADDRESS ?? '', StakeholderJson.abi, provder)
