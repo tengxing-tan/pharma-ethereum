@@ -1,8 +1,5 @@
 'use client'
 
-import { updateStakeholderStatus } from "../action"
-import { ethers } from "ethers"
-import stakeholderAbi from "@/_utils/Stakeholder.json"
 import { redirect, useRouter } from "next/navigation"
 
 export default function VerifyForm({ metaMaskAcc, contractAdd }: {
@@ -23,27 +20,27 @@ export default function VerifyForm({ metaMaskAcc, contractAdd }: {
         if (typeof metaMaskAcc === 'undefined') redirect('/admin?error=metamask-not-installed')
         // init contract
         // const provider = new ethers.BrowserProvider(window.ethereum)
-        const provider = new ethers.JsonRpcProvider(process.env.HARDHAT_RPC_URL)
-        const signer = await provider.getSigner(0)
-        const contract = new ethers.Contract(
-            contractAdd,
-            stakeholderAbi.abi,
-            signer
-        )
+        // const provider = new ethers.JsonRpcProvider(process.env.HARDHAT_RPC_URL)
+        // const signer = await provider.getSigner(0)
+        // const contract = new ethers.Contract(
+        //     contractAdd,
+        //     stakeholderAbi.abi,
+        //     signer
+        // )
 
-        // handle contract
-        const transaction = await contract.verifyStakeholder(
-            metaMaskAcc,
-            verify,
-        )
-        const receipt = await transaction.wait()
-        // console.log('Receipt: ', receipt)
+        // // handle contract
+        // const transaction = await contract.verifyStakeholder(
+        //     metaMaskAcc,
+        //     verify,
+        // )
+        // const receipt = await transaction.wait()
+        // // console.log('Receipt: ', receipt)
 
-        if (!receipt || receipt.hash === 0) redirect('/admin?error=transaction-failed')
-        else {
-            await updateStakeholderStatus(metaMaskAcc, verify, receipt.hash)
-            router.refresh()
-        }
+        // if (!receipt || receipt.hash === 0) redirect('/admin?error=transaction-failed')
+        // else {
+        //     await updateStakeholderStatus(metaMaskAcc, verify, receipt.hash)
+        //     router.refresh()
+        // }
     }
 
     return (
