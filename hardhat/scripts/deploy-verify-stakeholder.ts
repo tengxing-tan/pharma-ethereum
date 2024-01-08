@@ -14,7 +14,7 @@ async function verifyStakeholder() {
     )
     const tengxing = await contract.addStakeholder(
         'tantengxing@email.com',
-        '0x90f79bf6eb2c4f870365e785982e1f101e93b906',
+        '0x23618e81e3f5cdf7f54c3d65f7fbc0abf5b21e8f',
         getNow(),
     )
 
@@ -22,7 +22,7 @@ async function verifyStakeholder() {
     const viewAcc9 = await contract.getStakeholder(acc9)
 
     // verify stakeholder
-    await contract.verifyStakeholder(acc9, true, { value: ethers.parseEther("0") })
+    await contract.verifyStakeholder(acc9, true)
     const viewAcc9AfterVerified = await contract.getStakeholder(acc9)
 
     // get empty stakeholder

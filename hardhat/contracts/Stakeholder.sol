@@ -23,8 +23,7 @@ contract Stakeholder {
             block.timestamp,
             true
         );
-        console.log("Deployed Stakeholder contract, with address ", msg.sender);
-        owner = payable(msg.sender);
+        // console.log("Deployed Stakeholder contract, with address ", msg.sender);
     }
 
     // Function to add Stakeholders
@@ -32,22 +31,18 @@ contract Stakeholder {
         string memory _email,
         address _metaMaskAccount,
         uint _registeredAt // js Date.toLocalString()
-    ) public payable {
+    ) public {
         require(
             stakeholders[_metaMaskAccount].metamaskAccount != _metaMaskAccount,
             "Stakeholder already exists"
         );
-
-        uint fee = msg.value;
-        if (fee >= 0) {
-            stakeholders[_metaMaskAccount] = Stakeholders(
-                _email,
-                _metaMaskAccount,
-                _registeredAt,
-                0, // to be verified
-                false
-            );
-        }
+        stakeholders[_metaMaskAccount] = Stakeholders(
+            _email,
+            _metaMaskAccount,
+            _registeredAt,
+            0, // to be verified
+            false
+        );
     }
 
     // Function to get Stakeholders
@@ -61,11 +56,8 @@ contract Stakeholder {
     function verifyStakeholder(
         address _metaMaskAccount,
         bool _isAuthentic
-    ) external payable {
-        uint fee = msg.value;
-        if (fee >= 0) {
-            stakeholders[_metaMaskAccount].verifiedAt = block.timestamp;
-            stakeholders[_metaMaskAccount].isAuthentic = _isAuthentic;
-        }
+    ) external {
+        stakeholders[_metaMaskAccount].verifiedAt = block.timestamp;
+        stakeholders[_metaMaskAccount].isAuthentic = _isAuthentic;
     }
 }
