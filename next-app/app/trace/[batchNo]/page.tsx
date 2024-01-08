@@ -6,7 +6,6 @@ import { getDrugBatchByBatchNo } from "app/api/action/getDrugBatch";
 import { getStakeholderById, getStakeholderByImporterId, getStakeholderByManufacturerId, getStakeholderByWholesalerId } from "app/api/action/getStakeholder";
 import Link from "next/link";
 import { StakeholderObj } from "@/app/admin/_components/stakeholder-profile";
-import { getStakeholderOnEth } from "@/lib/smart-contracts/manage-stakeholders";
 import clsx from "clsx";
 
 export default async function Page({ params }: {
@@ -35,8 +34,10 @@ export default async function Page({ params }: {
     if (owner === undefined || !owner) return null
     if (manufacturer === undefined || !manufacturer) return null
 
-    const ownerOnEth = await getStakeholderOnEth(owner.metaMaskAcc)
-    const manufacturerOnEth = await getStakeholderOnEth(manufacturer.metaMaskAcc)
+    // const ownerOnEth = await getStakeholderOnEth(owner.metaMaskAcc)
+    // const manufacturerOnEth = await getStakeholderOnEth(manufacturer.metaMaskAcc)
+    const ownerOnEth = null
+    const manufacturerOnEth = null
 
     return (
         <div className="px-6 w-full max-w-3xl">

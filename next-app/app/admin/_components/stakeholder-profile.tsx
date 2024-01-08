@@ -1,7 +1,6 @@
 'use server'
 
 import { getStakeholderById } from "@/app/api/action/getStakeholder"
-import { getStakeholderOnEth } from "@/lib/smart-contracts/manage-stakeholders"
 import clsx from "clsx"
 
 export default async function StakeholderProfile({ stakeholderId, children }: {
@@ -13,8 +12,10 @@ export default async function StakeholderProfile({ stakeholderId, children }: {
     if (!profile) return null
 
     // Ethereum
-    const stakeholderOnEth: StakeholderObj = await getStakeholderOnEth(profile.metaMaskAcc)
-    const isVerified = stakeholderOnEth && stakeholderOnEth.isAuthentic
+    // const stakeholderOnEth: StakeholderObj = await getStakeholderOnEth(profile.metaMaskAcc)
+    const stakeholderOnEth = null
+    // const isVerified = stakeholderOnEth && stakeholderOnEth.isAuthentic
+    const isVerified = false
 
     return (
         <div className="bg-white w-full p-4 rounded shadow">

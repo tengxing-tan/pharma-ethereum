@@ -3,7 +3,6 @@
 import { getStakeholders, getStakeholdersByRole } from "@/app/api/action/getStakeholder"
 import clsx from "clsx"
 import Link from "next/link"
-import { getStakeholderOnEth } from "@/lib/smart-contracts/manage-stakeholders"
 import { StakeholderObj } from "./stakeholder-profile"
 
 export default async function StakeholderList({ role }: {
@@ -20,8 +19,9 @@ export default async function StakeholderList({ role }: {
 
     // get data from blockchain
     async function VerifyComponent({ metaMaskAcc }: { metaMaskAcc: string }) {
-        const stakeholder: StakeholderObj = await getStakeholderOnEth(metaMaskAcc)
-        const isVerified = stakeholder && stakeholder.isAuthentic === true
+        // const stakeholder: StakeholderObj = await getStakeholderOnEth(metaMaskAcc)
+        // const isVerified = stakeholder && stakeholder.isAuthentic === true
+        const isVerified = false
 
         return (
             <>

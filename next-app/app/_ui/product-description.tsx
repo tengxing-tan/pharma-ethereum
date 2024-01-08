@@ -1,6 +1,5 @@
 import { Drug, Stakeholder } from "@prisma/client";
 import { StakeholderObj } from "@/app/admin/_components/stakeholder-profile";
-import { getStakeholderOnEth } from "@/lib/smart-contracts/manage-stakeholders";
 
 export default async function ProductDescription({ props }: {
     props: {
