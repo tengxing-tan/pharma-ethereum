@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect } from "react"
 import { updateStakeholderStatus } from "../action"
 import { ethers } from "ethers"
 import stakeholderAbi from "@/_utils/Stakeholder.json"
@@ -14,18 +13,17 @@ export default function VerifyForm({ metaMaskAcc, contractAdd }: {
     const router = useRouter()
     if (typeof metaMaskAcc === 'undefined') return null
 
-    useEffect(() => {
-        if (typeof window.ethereum === 'undefined') {
-            console.log('MetaMask not installed')
-        }
-    }, [])
+    if (typeof window.ethereum === 'undefined') {
+        console.log('MetaMask not installed')
+    }
+
 
     async function handleClick(verify: boolean) {
         console.log("handleClick")
         if (typeof metaMaskAcc === 'undefined') redirect('/admin?error=metamask-not-installed')
         // init contract
-        const provider = new ethers.BrowserProvider(window.ethereum)
-        // const provider = new ethers.JsonRpcProvider(process.env.HARDHAT_RPC_URL)
+        // const provider = new ethers.BrowserProvider(window.ethereum)
+        const provider = new ethers.JsonRpcProvider(process.env.HARDHAT_RPC_URL)
         const signer = await provider.getSigner(0)
         const contract = new ethers.Contract(
             contractAdd,

@@ -15,7 +15,7 @@ export default async function Page({ searchParams }: { searchParams: { type: str
         <div className="max-w-5xl p-4 lg:px-6">
             <Heading heading="Supply Chain Overview" />
             <div className="pt-4 pb-8 text-gray-700">
-                <p>Searching for "<span className="font-semibold">{searchKey}</span>" ({TYPE}).
+                <p>Searching for &ldquo;<span className="font-semibold">{searchKey}</span>&rdquo; ({TYPE}).
                     There are {result !== null && result ? `${result.length} products found.` : 'Query error.'}
                 </p>
             </div>
