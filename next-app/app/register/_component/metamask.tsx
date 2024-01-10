@@ -37,8 +37,8 @@ export default function Metamask({ contractAdd }: {
         let handleError = false
 
         // init contract
-        // const provider = new ethers.BrowserProvider(window.ethereum)
-        const provider = new ethers.JsonRpcProvider('http://localhost:8545')
+        const provider = new ethers.BrowserProvider(window.ethereum)
+        // const provider = new ethers.JsonRpcProvider('http://localhost:8545')
         const signer = await provider.getSigner(0)
         const contract = new ethers.Contract(
             contractAdd,
@@ -68,7 +68,6 @@ export default function Metamask({ contractAdd }: {
             // redirect to company page
             redirect('/register?msg=success')
         }
-        redirect('/register#company')
     }
 
     return (

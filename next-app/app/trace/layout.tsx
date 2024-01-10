@@ -7,16 +7,7 @@ export const metadata = {
 
 export default async function TraceLayout(props: { children: React.ReactNode }) {
   return (
-<<<<<<< HEAD
-    <div className="space-y-8 px-2 pt-20 lg:px-8 lg:py-8">
-      <div className="flex justify-center items-center">
-        <AuthProvider>
-          {props.children}
-        </AuthProvider>
-      </div>
-    </div>
 
-=======
     <AuthProvider>
       <div className="space-y-8 px-2 pt-20 lg:px-8 lg:py-8" >
         <div className="flex justify-center items-center">
@@ -24,6 +15,6 @@ export default async function TraceLayout(props: { children: React.ReactNode }) 
         </div>
       </div >
     </AuthProvider>
->>>>>>> integration
+
   )
 }

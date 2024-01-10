@@ -2,14 +2,10 @@ import { Heading } from 'app/_ui/heading';
 import Form from '../_component/form';
 import { getManufacturers } from 'app/api/action/getStakeholder';
 import Link from 'next/link';
-// import { useSession } from 'next-auth/react';
 
 export default async function Page() {
     const manufacturers = await getManufacturers()
     if (!manufacturers) return null
-
-    // const { data: session } = useSession()
-    // if (session?.user?.email === undefined) return null
 
     return (
         <div className="max-w-none p-6">
@@ -21,7 +17,7 @@ export default async function Page() {
                 Then, provide the information of your registered pharmaceutical product.
                 After submit this form, you need to wait for admin to approve.</p>
 
-            <Form manufacturers={manufacturers} email={'tantengxing@email.com'} />
+            <Form manufacturers={manufacturers} />
         </div >
     );
 }
