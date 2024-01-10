@@ -20,7 +20,14 @@ export default function Page() {
     return (
         <div className="max-w-none py-32">
             <div className="absolute w-full top-0 left-0 right-0 flex justify-between items-center p-2">
+<<<<<<< HEAD
                 <LoginComponent session={session} />
+=======
+
+                <LoginComponent session={session} />
+
+
+>>>>>>> integration
             </div>
             <form action="trace/search" method="GET">
                 <div className="flex flex-col items-center">

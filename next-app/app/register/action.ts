@@ -9,11 +9,16 @@ import { getStakeholderByEmail } from '../api/action/getStakeholder';
 import { ethers } from 'ethers';
 import StakeholderJson from "@/_utils/Stakeholder.json"
 
+<<<<<<< HEAD
 // const provder = new ethers.JsonRpcProvider(process.env.HARDHAT_RPC_URL)
 // const contract = new ethers.Contract(process.env.STAKEHOLDER_CONTRACT_ADDRESS ?? '', StakeholderJson.abi, provder)
+=======
+>>>>>>> integration
 
 // Get stakeholer from Ethereum
 const isRegistered = async (metaMaskAccount: string, email: string) => {
+    const provder = new ethers.JsonRpcProvider(process.env.HARDHAT_RPC_URL)
+    const contract = new ethers.Contract(process.env.STAKEHOLDER_CONTRACT_ADDRESS ?? '', StakeholderJson.abi, provder)
 
     // check if stakeholder is stored on database
     const onRdbms = await getStakeholderByEmail(email)
@@ -43,6 +48,8 @@ const isRegistered = async (metaMaskAccount: string, email: string) => {
 }
 
 export async function createStakeholder(formData: FormData) {
+    const provder = new ethers.JsonRpcProvider(process.env.HARDHAT_RPC_URL)
+    const contract = new ethers.Contract(process.env.STAKEHOLDER_CONTRACT_ADDRESS ?? '', StakeholderJson.abi, provder)
 
     const validEmail = emailSchema.parse(formData.get('email'));
     const validMetaMaskAccount = metaMaskAccountSchema.parse(formData.get('metaMaskAccount'));
