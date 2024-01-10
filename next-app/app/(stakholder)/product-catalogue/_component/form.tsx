@@ -1,16 +1,14 @@
 import UserInput from '@/app/_ui/user-input';
 import { createNewProduct } from '../action';
 import { Stakeholder } from '@prisma/client';
-import { useSession } from 'next-auth/react';
 
 export default function Form({
-    manufacturers
+    manufacturers,
+    email
 }: {
-    manufacturers: ManufacturerWithInfo[]
+    manufacturers: ManufacturerWithInfo[],
+    email: string | null
 }) {
-
-    const { data: session } = useSession()
-    const email = session?.user?.email
 
     return (
         <form action={createNewProduct}>
