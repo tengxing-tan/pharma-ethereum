@@ -14,6 +14,7 @@ contract Stakeholder {
     mapping(address => Stakeholders) public stakeholders; // Mapping id to Stakeholders
 
     address payable public owner;
+    event Verify(uint amount, uint when);
 
     constructor(uint _registeredAt) {
         stakeholders[msg.sender] = Stakeholders(
@@ -57,6 +58,8 @@ contract Stakeholder {
         address _metaMaskAccount,
         bool _isAuthentic
     ) external {
+        emit Verify(address(this).balance, block.timestamp);
+
         stakeholders[_metaMaskAccount].verifiedAt = block.timestamp;
         stakeholders[_metaMaskAccount].isAuthentic = _isAuthentic;
     }

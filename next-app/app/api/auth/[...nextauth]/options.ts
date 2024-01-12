@@ -17,7 +17,7 @@ export const options: NextAuthOptions = {
                 // console.log(`🥚 Checking user input: MetaMask account (${credentials?.metaMaskAccount}), email (${credentials?.email})
                 //     MetaMask account is valid: ${userOnEth}
                 //     User is: ${JSON.stringify(user)}`)
-                return (userOnEth && user && userOnEth === user.email)
+                return (userOnEth && user && userOnEth.email === user.email)
                     ? user
                     : null;
             },

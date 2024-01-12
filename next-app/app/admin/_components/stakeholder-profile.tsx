@@ -2,6 +2,7 @@
 
 import { getStakeholderById } from "@/app/api/action/getStakeholder"
 import clsx from "clsx"
+import { getUserByEthers } from "../action"
 
 export default async function StakeholderProfile({ stakeholderId, children }: {
     stakeholderId: string,
@@ -12,10 +13,10 @@ export default async function StakeholderProfile({ stakeholderId, children }: {
     if (!profile) return null
 
     // Ethereum
-    // const stakeholderOnEth: StakeholderObj = await getStakeholderOnEth(profile.metaMaskAcc)
-    const stakeholderOnEth = null
-    // const isVerified = stakeholderOnEth && stakeholderOnEth.isAuthentic
-    const isVerified = false
+    const stakeholderOnEth: StakeholderObj = await getUserByEthers(profile.metaMaskAcc)
+    // const stakeholderOnEth = null
+    const isVerified = stakeholderOnEth && stakeholderOnEth.isAuthentic
+    // const isVerified = false
 
     return (
         <div className="bg-white w-full p-4 rounded shadow">
@@ -57,15 +58,15 @@ export default async function StakeholderProfile({ stakeholderId, children }: {
                         {/* verfied at */}
                         <p>&gt; Registered At</p>
                         <code className="text-gray-700 col-span-2">
-                            {stakeholderOnEth && Number(stakeholderOnEth.registeredAt) !== 0
-                                ? new Date(Number(stakeholderOnEth.registeredAt) * 1000).toString()
+                            {stakeholderOnEth && stakeholderOnEth.registeredAt
+                                ? stakeholderOnEth.registeredAt
                                 : 'no data'
                             }</code>
                         {/* verfied at */}
                         <p>&gt; Verfied At</p>
                         <code className="text-gray-700 col-span-2">
-                            {stakeholderOnEth && Number(stakeholderOnEth.verifiedAt) !== 0
-                                ? new Date(Number(stakeholderOnEth.verifiedAt) * 1000).toString()
+                            {stakeholderOnEth && stakeholderOnEth.verifiedAt
+                                ? stakeholderOnEth.verifiedAt
                                 : 'no data'
                             }</code>
                         {/* transaction hash */}
@@ -102,7 +103,7 @@ export default async function StakeholderProfile({ stakeholderId, children }: {
 export type StakeholderObj = {
     email: string;
     metamaskAccount: string;
-    registeredAt: number | null;
-    verifiedAt: number | null;
-    isAuthentic: boolean;
+    registeredAt: string | null;
+    verifiedAt: string | null;
+    isAuthentic: any;
 }
